@@ -1,22 +1,23 @@
 package com.nhnacademy.auth.user.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Data
+@Builder
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Customer {
     @Id
+    @Column(name = "customer_no")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long customerNo;
     @Column(name = "customer_id")
-    private Long customerId;
+    private String customerId;
     @Column(name = "customer_password")
     private String customerPassword;
     @Column(name = "customer_name")
@@ -27,6 +28,6 @@ public class Customer {
     private String customerEmail;
     @Column(name = "customer_birthday")
     private LocalDate customerBirthday;
-    @Column(name = "customer_type")
-    private Boolean customerType;
+    @Column(name = "customer_role")
+    private String  customerRole;
 }
