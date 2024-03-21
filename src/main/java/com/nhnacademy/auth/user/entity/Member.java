@@ -13,8 +13,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Member {
     @Id
-    @Column(name = "customer_id")
-    private Long customerId;
+    @OneToOne
+    @JoinColumn(name = "customerNo")
+    private Customer customer;
     @Column(name = "member_id")
     private String memberId;
     @Column(name = "last_login_at")
