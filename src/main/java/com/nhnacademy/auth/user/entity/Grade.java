@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -14,6 +12,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 public class Grade {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "grade_id")
     private Long gradeId;
     @Column(name = "grade_name")
