@@ -20,8 +20,8 @@ public class GradeServiceImpl implements GradeService {
     @Override
     public Grade createGrade(GradeCreateDto gradeCreateDto) {
         Grade grade = new Grade();
-        grade.setGradeName(grade.getGradeName());
-        grade.setAccumulateRate(grade.getAccumulateRate());
+        grade.setGradeName(gradeCreateDto.getGradeName());
+        grade.setAccumulateRate(gradeCreateDto.getAccumulateRate());
         return gradeRepository.save(grade);
     }
 

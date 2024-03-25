@@ -12,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Grade {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "grade_id")
     private Long gradeId;
     @Column(name = "grade_name")
