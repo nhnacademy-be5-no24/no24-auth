@@ -16,5 +16,6 @@ public class CustomerCreateDto {
     private String customerPassword;
     private String customerName;
     private String customerPhoneNumber;
-
+    private String customerEmail;
+    private LocalDate customerBirthday;
 }

@@ -43,19 +43,16 @@ public class MemberServiceImpl implements MemberService {
         customer.setCustomerPassword(encPassword);
         customer.setCustomerName(memberCreateDto.getCustomerName());
         customer.setCustomerPhoneNumber(memberCreateDto.getCustomerPhoneNumber());
-//        customer.setCustomerEmail(memberCreateDto.getCustomerEmail());
-//        customer.setCustomerBirthday(memberCreateDto.getCustomerBirthday());
+        customer.setCustomerEmail(memberCreateDto.getCustomerEmail());
+        customer.setCustomerBirthday(memberCreateDto.getCustomerBirthday());
         customer.setCustomerRole("ROLE_MEMBER"); //비회원 회원가입 false 회원 회원가입 true
         customer = customerRepository.save(customer);
         log.info("{}",customer.toString());
 
         Member member = new Member();
-//        member.setMemberId(memberCreateDto.getMemberId());
-//        member.setMember_no(customerRepository.findByCustomerId(memberCreateDto.getCustomerId()).getCustomerNo());
         member.setCustomerNo(customer.getCustomerNo());
         member.setCustomer(customer);
         member.setMemberId(memberCreateDto.getCustomerId());
-//        member.setCustomer_no(customer.getCustomerNo());
         member.setLastLoginAt(LocalDateTime.now());
         Grade grade = gradeService.getGrade(memberCreateDto.getGradeId());
         member.setGrade(grade);
@@ -75,16 +72,15 @@ public class MemberServiceImpl implements MemberService {
         customer.setCustomerPassword(encPassword);
         customer.setCustomerName(memberCreateDto.getCustomerName());
         customer.setCustomerPhoneNumber(memberCreateDto.getCustomerPhoneNumber());
+        customer.setCustomerEmail(memberCreateDto.getCustomerEmail());
+        customer.setCustomerBirthday(memberCreateDto.getCustomerBirthday());
         customer.setCustomerRole("ROLE_MEMBER"); //비회원 회원가입 false 회원 회원가입 true
         customer = customerRepository.save(customer);
 
         Member member = memberRepository.findByCustomer(customer);
-//        member.setMemberId(memberCreateDto.getMemberId());
-//        member.setMember_no(customerRepository.findByCustomerId(memberCreateDto.getCustomerId()).getCustomerNo());
         member.setCustomerNo(customer.getCustomerNo());
         member.setCustomer(customer);
         member.setMemberId(memberCreateDto.getCustomerId());
-//        member.setCustomer_no(customer.getCustomerNo());
         Grade grade = gradeService.getGrade(memberCreateDto.getGradeId());
         member.setGrade(grade);
         member.setIsLeave(false);

@@ -32,8 +32,8 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setCustomerPassword(encPassword);
         customer.setCustomerName(customerCreateDto.getCustomerName());
         customer.setCustomerPhoneNumber(customerCreateDto.getCustomerPhoneNumber());
-//        customer.setCustomerEmail(customerCreateDto.getCustomerEmail());
-//        customer.setCustomerBirthday(customerCreateDto.getCustomerBirthday());
+        customer.setCustomerEmail(customerCreateDto.getCustomerEmail());
+        customer.setCustomerBirthday(customerCreateDto.getCustomerBirthday());
         customer.setCustomerRole("ROLE_CUSTOMER"); //비회원 회원가입 false 회원 회원가입 true
         return customerRepository.save(customer);
     }
@@ -47,8 +47,8 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setCustomerPassword(encPassword);
         customer.setCustomerName(customerCreateDto.getCustomerName());
         customer.setCustomerPhoneNumber(customerCreateDto.getCustomerPhoneNumber());
-//        customer.setCustomerEmail(customerCreateDto.getCustomerEmail());
-//        customer.setCustomerBirthday(customerCreateDto.getCustomerBirthday());
+        customer.setCustomerEmail(customerCreateDto.getCustomerEmail());
+        customer.setCustomerBirthday(customerCreateDto.getCustomerBirthday());
         return customerRepository.save(customer);
     }
 }

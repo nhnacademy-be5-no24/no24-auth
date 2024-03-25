@@ -16,7 +16,8 @@ public class MemberCreateDto {
     private String customerPassword;
     private String customerName;
     private String customerPhoneNumber;
-//    private String customerEmail;
-//    private LocalDate customerBirthday;
+    private String customerEmail;
+    private LocalDate customerBirthday;
+
     private Long gradeId;
 }
