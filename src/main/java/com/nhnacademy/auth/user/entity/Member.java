@@ -29,7 +29,6 @@ public class Member {
     @OneToOne
     @JoinColumn(name = "grade_id")
     private Grade grade;       //class 이름 사용안됨
-
     @Column(name = "role")
     private String role;
 

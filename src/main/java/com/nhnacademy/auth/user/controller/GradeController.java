@@ -2,7 +2,6 @@ package com.nhnacademy.auth.user.controller;
 
 import com.nhnacademy.auth.user.dto.GradeCreateDto;
 import com.nhnacademy.auth.user.entity.Grade;
-import com.nhnacademy.auth.user.repository.GradeRepository;
 import com.nhnacademy.auth.user.service.GradeService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

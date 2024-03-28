@@ -4,7 +4,6 @@ import com.nhnacademy.auth.user.dto.CustomerCreateDto;
 import com.nhnacademy.auth.user.entity.Customer;
 import com.nhnacademy.auth.user.service.CustomerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

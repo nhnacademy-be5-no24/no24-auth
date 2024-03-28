@@ -7,7 +7,6 @@ import com.nhnacademy.auth.user.entity.Member;
 import com.nhnacademy.auth.user.repository.CustomerRepository;
 import com.nhnacademy.auth.user.repository.GradeRepository;
 import com.nhnacademy.auth.user.repository.MemberRepository;
-import com.nhnacademy.auth.user.service.GradeService;
 import com.nhnacademy.auth.user.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,7 @@ public class MemberServiceImpl implements MemberService {
     private final CustomerRepository customerRepository;
     private final MemberRepository memberRepository;
     private final GradeRepository gradeRepository;
-    private final GradeService gradeService;
+
 
     @Override
     public Member getMember(Long id) {
@@ -54,7 +53,7 @@ public class MemberServiceImpl implements MemberService {
         member.setCustomer(customer);
         member.setMemberId(memberCreateDto.getCustomerId());
         member.setLastLoginAt(LocalDateTime.now());
-        Grade grade = gradeService.getGrade(memberCreateDto.getGradeId());
+        Grade grade = gradeRepository.findByGradeId(memberCreateDto.getGradeId());
         member.setGrade(grade);
         member.setIsLeave(false);
         member.setIsActive(true);
@@ -81,7 +80,7 @@ public class MemberServiceImpl implements MemberService {
         member.setCustomerNo(customer.getCustomerNo());
         member.setCustomer(customer);
         member.setMemberId(memberCreateDto.getCustomerId());
-        Grade grade = gradeService.getGrade(memberCreateDto.getGradeId());
+        Grade grade = gradeRepository.findByGradeId(memberCreateDto.getGradeId());
         member.setGrade(grade);
         member.setIsLeave(false);
         member.setIsActive(true);
