@@ -10,6 +10,6 @@ public interface GradeService {
 
     Grade modifyGrade(Long id, GradeCreateDto gradeCreateDto);
 
-    void deleteGrade(Long id);
+    Grade deleteGrade(Long id);
 
 }

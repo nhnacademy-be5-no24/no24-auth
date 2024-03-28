@@ -14,7 +14,7 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public Grade getGrade(Long id) {
-        return gradeRepository.findById(id).orElse(null);
+        return gradeRepository.findByGradeId(id);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public Grade modifyGrade(Long id, GradeCreateDto gradeCreateDto) {
-        Grade grade = gradeRepository.findById(id).orElse(null);
+        Grade grade = gradeRepository.findByGradeId(id);
         grade.setGradeName(gradeCreateDto.getGradeName());
         grade.setAccumulateRate(gradeCreateDto.getAccumulateRate());
         return gradeRepository.save(grade);
@@ -35,7 +35,7 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public void deleteGrade(Long id) {
-        gradeRepository.deleteById(id);
+    public Grade deleteGrade(Long id) {
+        return gradeRepository.deleteByGradeId(id);
     }
 }
