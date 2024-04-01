@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -61,30 +62,31 @@ public class MemberServiceImplTest {
     @DisplayName("member 생성")
     void createMember() {
         //given
-        Customer customer = new Customer();
-        customer.setCustomerNo(customerNo);
-        customer.setCustomerId(customerId);
-        customer.setCustomerPassword(customerPassword);
-        customer.setCustomerName(customerName);
-        customer.setCustomerEmail(customerEmail);
-        customer.setCustomerBirthday(customerBirthday);
-        customer.setCustomerRole(customerRole);
-        customer.setCustomerPhoneNumber(customerPhoneNumber);
+        Customer customer = new Customer().builder()
+                .customerNo(customerNo)
+                .customerId(customerId)
+                .customerPassword(customerPassword)
+                .customerName(customerName)
+                .customerPhoneNumber(customerPhoneNumber)
+                .customerEmail(customerEmail)
+                .customerBirthday(customerBirthday)
+                .customerRole(customerRole).build();
 
-        Grade grade = new Grade();
-        grade.setGradeId(gradeId);
-        grade.setGradeName(gradeName);
-        grade.setAccumulateRate(accumulateRate);
+        Grade grade = new Grade().builder()
+                .gradeId(gradeId)
+                .gradeName(gradeName)
+                .accumulateRate(accumulateRate)
+                .build();
 
-        Member member = new Member();
-        member.setCustomerNo(customerNo);
-        member.setCustomer(customer);
-        member.setMemberId(memberId);
-        member.setLastLoginAt(LastLoginAt);
-        member.setRole(role);
-        member.setGrade(grade);
-        member.setIsLeave(false);
-        member.setIsActive(true);
+        Member member = new Member().builder()
+                .customerNo(customerNo)
+                .customer(customer)
+                .memberId(memberId)
+                .lastLoginAt(LastLoginAt)
+                .role(role)
+                .grade(grade)
+                .isLeave(false)
+                .isActive(true).build();
 
         MemberCreateDto memberCreateDto = new MemberCreateDto();
         memberCreateDto.setCustomerId(customerId);
@@ -98,7 +100,7 @@ public class MemberServiceImplTest {
         //when
         when(customerRepository.save(any())).thenReturn(customer);
         when(memberRepository.save(any())).thenReturn(member);
-        when(gradeRepository.findByGradeId(1L)).thenReturn(grade);
+        when(gradeRepository.findById(1L)).thenReturn(Optional.ofNullable(grade));
 
         //then
         Member result = memberService.createMember(memberCreateDto);
@@ -110,30 +112,31 @@ public class MemberServiceImplTest {
     @DisplayName("member 수정")
     void modifyMember() {
         //given
-        Customer customer = new Customer();
-        customer.setCustomerNo(customerNo);
-        customer.setCustomerId(customerId);
-        customer.setCustomerPassword(customerPassword);
-        customer.setCustomerName(customerName);
-        customer.setCustomerEmail(customerEmail);
-        customer.setCustomerBirthday(customerBirthday);
-        customer.setCustomerRole(customerRole);
-        customer.setCustomerPhoneNumber(customerPhoneNumber);
+        Customer customer = new Customer().builder()
+                .customerNo(1L)
+                .customerId(customerId)
+                .customerPassword(customerPassword)
+                .customerName(customerName)
+                .customerPhoneNumber(customerPhoneNumber)
+                .customerEmail(customerEmail)
+                .customerBirthday(customerBirthday)
+                .customerRole(customerRole).build();
 
-        Grade grade = new Grade();
-        grade.setGradeId(gradeId);
-        grade.setGradeName(gradeName);
-        grade.setAccumulateRate(accumulateRate);
+        Grade grade = new Grade().builder()
+                .gradeId(gradeId)
+                .gradeName(gradeName)
+                .accumulateRate(accumulateRate)
+                .build();
 
-        Member member = new Member();
-        member.setCustomerNo(customerNo);
-        member.setCustomer(customer);
-        member.setMemberId(memberId);
-        member.setLastLoginAt(LastLoginAt);
-        member.setRole(role);
-        member.setGrade(grade);
-        member.setIsLeave(false);
-        member.setIsActive(true);
+        Member member = new Member().builder()
+                .customerNo(customerNo)
+                .customer(customer)
+                .memberId(memberId)
+                .lastLoginAt(LastLoginAt)
+                .role(role)
+                .grade(grade)
+                .isLeave(false)
+                .isActive(true).build();
 
         MemberCreateDto memberCreateDto = new MemberCreateDto();
         memberCreateDto.setCustomerId(customerId);
@@ -145,11 +148,10 @@ public class MemberServiceImplTest {
         memberCreateDto.setGradeId(gradeId);
 
         //when
-        when(customerRepository.save(any())).thenReturn(customer);
         when(memberRepository.save(any())).thenReturn(member);
-        when(gradeRepository.findByGradeId(1L)).thenReturn(grade);
-        when(customerRepository.findByCustomerNo(1L)).thenReturn(customer);
-        when(memberRepository.findByCustomer(customer)).thenReturn(member);
+        when(gradeRepository.findById(1L)).thenReturn(Optional.ofNullable(grade));
+        when(customerRepository.findById(1L)).thenReturn(Optional.ofNullable(customer));
+        when(memberRepository.findById(1L)).thenReturn(Optional.ofNullable(member));
 
         //then
         Member result = memberService.modifyMember(1L, memberCreateDto);
@@ -161,35 +163,37 @@ public class MemberServiceImplTest {
     @DisplayName("memeber Id로 조회")
     void getMember() {
         //given
-        Customer customer = new Customer();
-        customer.setCustomerNo(customerNo);
-        customer.setCustomerId(customerId);
-        customer.setCustomerPassword(customerPassword);
-        customer.setCustomerName(customerName);
-        customer.setCustomerEmail(customerEmail);
-        customer.setCustomerBirthday(customerBirthday);
-        customer.setCustomerRole(customerRole);
-        customer.setCustomerPhoneNumber(customerPhoneNumber);
+        Customer customer = new Customer().builder()
+                .customerNo(1L)
+                .customerId(customerId)
+                .customerPassword(customerPassword)
+                .customerName(customerName)
+                .customerPhoneNumber(customerPhoneNumber)
+                .customerEmail(customerEmail)
+                .customerBirthday(customerBirthday)
+                .customerRole(customerRole).build();
 
-        Grade grade = new Grade();
-        grade.setGradeId(gradeId);
-        grade.setGradeName(gradeName);
-        grade.setAccumulateRate(accumulateRate);
 
-        Member member = new Member();
-        member.setCustomerNo(customerNo);
-        member.setCustomer(customer);
-        member.setMemberId(memberId);
-        member.setLastLoginAt(LastLoginAt);
-        member.setRole(role);
-        member.setGrade(grade);
-        member.setIsLeave(false);
-        member.setIsActive(true);
+        Grade grade = new Grade().builder()
+                .gradeId(gradeId)
+                .gradeName(gradeName)
+                .accumulateRate(accumulateRate)
+                .build();
+
+
+        Member member = new Member().builder()
+                .customerNo(customerNo)
+                .customer(customer)
+                .memberId(memberId)
+                .lastLoginAt(LastLoginAt)
+                .role(role)
+                .grade(grade)
+                .isLeave(false)
+                .isActive(true).build();
         //when
-        when(customerRepository.findByCustomerNo(1L)).thenReturn(customer);
-        when(memberRepository.findByCustomer(any())).thenReturn(member);
+        when(memberRepository.findById(customerNo)).thenReturn(Optional.ofNullable(member));
         //then
-        Member result = memberService.getMember(1L);
+        Member result = memberService.getMember(customerNo);
         assertThat(member).isEqualTo(result);
     }
 
@@ -197,40 +201,50 @@ public class MemberServiceImplTest {
     @DisplayName("회원 삭제")
     void deleteMember() {
         //given
-        Customer customer = new Customer();
-        customer.setCustomerNo(customerNo);
-        customer.setCustomerId(customerId);
-        customer.setCustomerPassword(customerPassword);
-        customer.setCustomerName(customerName);
-        customer.setCustomerEmail(customerEmail);
-        customer.setCustomerBirthday(customerBirthday);
-        customer.setCustomerRole(customerRole);
-        customer.setCustomerPhoneNumber(customerPhoneNumber);
+        Customer customer = new Customer().builder()
+                .customerNo(1L)
+                .customerId(customerId)
+                .customerPassword(customerPassword)
+                .customerName(customerName)
+                .customerPhoneNumber(customerPhoneNumber)
+                .customerEmail(customerEmail)
+                .customerBirthday(customerBirthday)
+                .customerRole(customerRole).build();
 
-        Grade grade = new Grade();
-        grade.setGradeId(gradeId);
-        grade.setGradeName(gradeName);
-        grade.setAccumulateRate(accumulateRate);
+        Grade grade = new Grade().builder()
+                .gradeId(gradeId)
+                .gradeName(gradeName)
+                .accumulateRate(accumulateRate)
+                .build();
 
-        Member member = new Member();
-        member.setCustomerNo(customerNo);
-        member.setCustomer(customer);
-        member.setMemberId(memberId);
-        member.setLastLoginAt(LastLoginAt);
-        member.setRole(role);
-        member.setGrade(grade);
-        member.setIsLeave(false);
-        member.setIsActive(true);
+
+        Member member = new Member().builder()
+                .customerNo(customerNo)
+                .customer(customer)
+                .memberId(memberId)
+                .lastLoginAt(LastLoginAt)
+                .role(role)
+                .grade(grade)
+                .isLeave(false)
+                .isActive(true).build();
 
         //when
-        when(customerRepository.findByCustomerNo(1L)).thenReturn(customer);
-        when(memberRepository.findByCustomer(any())).thenReturn(member);
-        member.setIsLeave(true);
-        when(memberRepository.save(member)).thenReturn(member);
+        Member updatedMember = new Member().builder()
+                .customerNo(member.getCustomerNo())
+                .customer(member.getCustomer())
+                .memberId(member.getMemberId())
+                .lastLoginAt(member.getLastLoginAt())
+                .role(member.getRole())
+                .grade(member.getGrade())
+                .isLeave(true)
+                .isActive(member.getIsActive()).build();
+
+        when(memberRepository.save(any())).thenReturn(updatedMember);
+        when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
 
         //then
         Member result = memberService.deleteMember(1L);
-        assertThat(member).isEqualTo(result);
+        assertThat(updatedMember).isEqualTo(result);
         assertThat(true).isEqualTo(result.getIsLeave());
     }
 }

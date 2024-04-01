@@ -1,8 +1,6 @@
 package com.nhnacademy.auth.user.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -10,7 +8,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member {

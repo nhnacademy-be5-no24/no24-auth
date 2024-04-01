@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +28,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member getMember(Long id) {
-        Customer customer = customerRepository.findByCustomerNo(id);
-        Member member = memberRepository.findByCustomer(customer);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 멤버를 찾을 수 없습니다."));
         return member;
     }
 
@@ -37,28 +37,33 @@ public class MemberServiceImpl implements MemberService {
         String rawPassword = memberCreateDto.getCustomerPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
 
-        Customer customer = new Customer();
-        customer.setCustomerId(memberCreateDto.getCustomerId());
-        customer.setCustomerPassword(encPassword);
-        customer.setCustomerName(memberCreateDto.getCustomerName());
-        customer.setCustomerPhoneNumber(memberCreateDto.getCustomerPhoneNumber());
-        customer.setCustomerEmail(memberCreateDto.getCustomerEmail());
-        customer.setCustomerBirthday(memberCreateDto.getCustomerBirthday());
-        customer.setCustomerRole("ROLE_MEMBER"); //비회원 회원가입 false 회원 회원가입 true
-        customer = customerRepository.save(customer);
-        log.info("{}",customer.toString());
+        Customer customer = new Customer().builder()
+                .customerId(memberCreateDto.getCustomerId())
+                .customerPassword(encPassword)
+                .customerName(memberCreateDto.getCustomerName())
+                .customerPhoneNumber(memberCreateDto.getCustomerPhoneNumber())
+                .customerEmail(memberCreateDto.getCustomerEmail())
+                .customerBirthday(memberCreateDto.getCustomerBirthday())
+                .customerRole("ROLE_MEMBER").build();
 
-        Member member = new Member();
-        member.setCustomerNo(customer.getCustomerNo());
-        member.setCustomer(customer);
-        member.setMemberId(memberCreateDto.getCustomerId());
-        member.setLastLoginAt(LocalDateTime.now());
-        Grade grade = gradeRepository.findByGradeId(memberCreateDto.getGradeId());
-        member.setGrade(grade);
-        member.setIsLeave(false);
-        member.setIsActive(true);
-        member.setRole("ROLE_MEMBER");
-        return memberRepository.save(member);
+        customer = customerRepository.save(customer);
+
+        Optional<Grade> optionalGrade = gradeRepository.findById(memberCreateDto.getGradeId());
+        if (optionalGrade.isPresent()) {
+            Grade grade = optionalGrade.get();
+            Member member = new Member().builder()
+                    .customerNo(customer.getCustomerNo())
+                    .customer(customer)
+                    .memberId(memberCreateDto.getCustomerId())
+                    .lastLoginAt(LocalDateTime.now())
+                    .grade(grade)
+                    .isActive(true)
+                    .isLeave(false)
+                    .role("ROLE_MEMBER").build();
+            return memberRepository.save(member);
+        } else {
+            throw new RuntimeException("해당 등급을 찾을 수 없습니다.");
+        }
     }
 
     @Override
@@ -66,34 +71,47 @@ public class MemberServiceImpl implements MemberService {
         String rawPassword = memberCreateDto.getCustomerPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
 
-        Customer customer = customerRepository.findByCustomerNo(id);
-        customer.setCustomerId(memberCreateDto.getCustomerId());
-        customer.setCustomerPassword(encPassword);
-        customer.setCustomerName(memberCreateDto.getCustomerName());
-        customer.setCustomerPhoneNumber(memberCreateDto.getCustomerPhoneNumber());
-        customer.setCustomerEmail(memberCreateDto.getCustomerEmail());
-        customer.setCustomerBirthday(memberCreateDto.getCustomerBirthday());
-        customer.setCustomerRole("ROLE_MEMBER"); //비회원 회원가입 false 회원 회원가입 true
-        customer = customerRepository.save(customer);
+        Customer optionalCustomer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 고객을 찾을 수 없습니다. " + id));
 
-        Member member = memberRepository.findByCustomer(customer);
-        member.setCustomerNo(customer.getCustomerNo());
-        member.setCustomer(customer);
-        member.setMemberId(memberCreateDto.getCustomerId());
-        Grade grade = gradeRepository.findByGradeId(memberCreateDto.getGradeId());
-        member.setGrade(grade);
-        member.setIsLeave(false);
-        member.setIsActive(true);
-        member.setRole("ROLE_MEMBER");
+        Customer customer = new Customer().builder()
+                .customerNo(optionalCustomer.getCustomerNo())
+                .customerId(memberCreateDto.getCustomerId())
+                .customerPassword(encPassword)
+                .customerName(memberCreateDto.getCustomerName())
+                .customerPhoneNumber(memberCreateDto.getCustomerPhoneNumber())
+                .customerEmail(memberCreateDto.getCustomerEmail())
+                .customerBirthday(memberCreateDto.getCustomerBirthday())
+                .customerRole("ROLE_MEMBER").build();
+        Grade optionalGrade = gradeRepository.findById(memberCreateDto.getGradeId()).orElseThrow(() -> new RuntimeException("해당 등급을 찾을 수 없습니다. " + memberCreateDto.getGradeId()));
+        memberRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 고객을 찾을 수 없습니다."));
+
+        Member member = new Member().builder()
+                .customerNo(customer.getCustomerNo())
+                .customer(customer)
+                .memberId(memberCreateDto.getCustomerId())
+                .lastLoginAt(LocalDateTime.now())
+                .grade(optionalGrade)
+                .isActive(true)
+                .isLeave(false)
+                .role("ROLE_MEMBER").build();
         return memberRepository.save(member);
     }
 
 
     @Override
     public Member deleteMember(Long id) {
-        Customer customer = customerRepository.findByCustomerNo(id);
-        Member member = memberRepository.findByCustomer(customer);
-        member.setIsLeave(true);
-        return memberRepository.save(member);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 멤버를 찾을 수 없습니다."));
+        Member updatedMember = new Member().builder()
+                .customerNo(id)
+                .customer(member.getCustomer())
+                .memberId(member.getMemberId())
+                .lastLoginAt(member.getLastLoginAt())
+                .grade(member.getGrade())
+                .isActive(member.getIsActive())
+                .isLeave(true)
+                .role(member.getRole()).build();
+        return memberRepository.save(updatedMember);
+
+
     }
 }
