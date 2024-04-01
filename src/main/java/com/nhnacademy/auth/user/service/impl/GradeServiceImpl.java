@@ -7,6 +7,8 @@ import com.nhnacademy.auth.user.service.GradeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class GradeServiceImpl implements GradeService {
@@ -14,28 +16,45 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public Grade getGrade(Long id) {
-        return gradeRepository.findByGradeId(id);
+        Optional<Grade> optionalGrade = gradeRepository.findById(id);
+        if (optionalGrade.isPresent()) {
+            return optionalGrade.get();
+        }else {
+            throw new RuntimeException("등록되지 않은 등급입니다.");
+        }
     }
 
     @Override
     public Grade createGrade(GradeCreateDto gradeCreateDto) {
-        Grade grade = new Grade();
-        grade.setGradeName(gradeCreateDto.getGradeName());
-        grade.setAccumulateRate(gradeCreateDto.getAccumulateRate());
+        Grade grade = new Grade().builder()
+                .gradeName(gradeCreateDto.getGradeName())
+                .accumulateRate(gradeCreateDto.getAccumulateRate())
+                .build();
         return gradeRepository.save(grade);
     }
 
     @Override
     public Grade modifyGrade(Long id, GradeCreateDto gradeCreateDto) {
-        Grade grade = gradeRepository.findByGradeId(id);
-        grade.setGradeName(gradeCreateDto.getGradeName());
-        grade.setAccumulateRate(gradeCreateDto.getAccumulateRate());
-        return gradeRepository.save(grade);
-
+        Optional<Grade> optionalGrade = gradeRepository.findById(id);
+        if (optionalGrade.isPresent()) {
+            Grade grade = new Grade().builder()
+                    .gradeId(id)
+                    .gradeName(gradeCreateDto.getGradeName())
+                    .accumulateRate(gradeCreateDto.getAccumulateRate())
+                    .build();
+            return gradeRepository.save(grade);
+        } else {
+            throw new RuntimeException("등록되지 않은 등급입니다.");
+        }
     }
 
     @Override
     public Grade deleteGrade(Long id) {
-        return gradeRepository.deleteByGradeId(id);
+        Optional<Grade> optionalGrade = gradeRepository.findById(id);
+        if (optionalGrade.isPresent()) {
+            return gradeRepository.deleteByGradeId(id);
+        } else {
+            throw new RuntimeException("등록되지 않은 등급입니다.");
+        }
     }
 }

@@ -11,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -31,10 +33,10 @@ public class GradeServiceImplTest {
     @DisplayName("등급 생성")
     void createGrade() {
         //given
-        Grade grade = new Grade();
-        grade.setGradeId(1L);
-        grade.setGradeName(gradeName);
-        grade.setAccumulateRate(accumulateRate);
+        Grade grade = new Grade().builder()
+                .gradeId(1L)
+                .gradeName(gradeName)
+                .accumulateRate(accumulateRate).build();
 
         GradeCreateDto gradeCreateDto = new GradeCreateDto();
         gradeCreateDto.setGradeName(gradeName);
@@ -52,12 +54,12 @@ public class GradeServiceImplTest {
     @DisplayName("gradeId로 등급 조회")
     void getGrade() {
         //given
-        Grade grade = new Grade();
-        grade.setGradeId(1L);
-        grade.setGradeName(gradeName);
-        grade.setAccumulateRate(accumulateRate);
+        Grade grade = new Grade().builder()
+                .gradeId(1L)
+                .gradeName(gradeName)
+                .accumulateRate(accumulateRate).build();
         //when
-        when(gradeRepository.findByGradeId(anyLong())).thenReturn(grade);
+        when(gradeRepository.findById(anyLong())).thenReturn(Optional.ofNullable(grade));
 
         //then
         Grade result = gradeService.getGrade(1L);
@@ -68,22 +70,23 @@ public class GradeServiceImplTest {
     @DisplayName("id와 gradeDto로 등급 수정")
     void modifyGrade() {
         //given
-        Grade grade = new Grade();
-        grade.setGradeId(1L);
-        grade.setGradeName(gradeName);
-        grade.setAccumulateRate(accumulateRate);
+        Grade grade = new Grade().builder()
+                .gradeId(1L)
+                .gradeName(gradeName)
+                .accumulateRate(accumulateRate).build();
 
         GradeCreateDto gradeCreateDto = new GradeCreateDto();
         gradeCreateDto.setGradeName(gradeName);
         gradeCreateDto.setAccumulateRate(accumulateRate);
 
-        Grade modifiedGrade = new Grade();
-        modifiedGrade.setGradeId(1L);
-        modifiedGrade.setGradeName("B");
-        modifiedGrade.setAccumulateRate(200000L);
+        Grade modifiedGrade = new Grade().builder()
+                .gradeId(1L)
+                .gradeName("B")
+                .accumulateRate(200000L)
+                .build();
 
         //when
-        when(gradeRepository.findByGradeId(1L)).thenReturn(grade);
+        when(gradeRepository.findById(1L)).thenReturn(Optional.ofNullable(grade));
         when(gradeRepository.save(any())).thenReturn(modifiedGrade);
 
         //then
@@ -95,13 +98,14 @@ public class GradeServiceImplTest {
     @DisplayName("id로 등급 삭제")
     void deleteGrade() {
         //given
-        Grade grade = new Grade();
-        grade.setGradeId(1L);
-        grade.setGradeName(gradeName);
-        grade.setAccumulateRate(accumulateRate);
+        Grade grade = new Grade().builder()
+                .gradeId(1L)
+                .gradeName(gradeName)
+                .accumulateRate(accumulateRate).build();
 
         //when
         when(gradeRepository.deleteByGradeId(1L)).thenReturn(grade);
+        when(gradeRepository.findById(1L)).thenReturn(Optional.ofNullable(grade));
 
         //then
         Grade result = gradeService.deleteGrade(1L);
