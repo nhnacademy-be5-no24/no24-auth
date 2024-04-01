@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,7 +45,7 @@ public class CustomerServiceImplTest {
     CustomerServiceImpl customerService;
 
     private final String customerId = "customer1";
-    private final String password = "1234";
+    private final String customerPassword = "1234";
     private final String customerName = "김고객";
     private final String customerPhoneNumber = "01012345678";
     private final String customerEmail = "kim@gmail.com";
@@ -58,22 +59,23 @@ public class CustomerServiceImplTest {
     @Test
     public void createCustomer() {
 
-        Customer customer = new Customer();
-        customer.setCustomerId(customerId);
-        customer.setCustomerPassword(password);
-        customer.setCustomerName(customerName);
-        customer.setCustomerPhoneNumber(customerPhoneNumber);
-        customer.setCustomerEmail(customerEmail);
-        customer.setCustomerBirthday(customerBirthday);
-        customer.setCustomerRole(customerRole);
+        Customer customer = new Customer().builder()
+                .customerNo(1L)
+                .customerId(customerId)
+                .customerPassword(customerPassword)
+                .customerName(customerName)
+                .customerPhoneNumber(customerPhoneNumber)
+                .customerEmail(customerEmail)
+                .customerBirthday(customerBirthday)
+                .customerRole(customerRole).build();
 
         CustomerCreateDto customerCreateDto = new CustomerCreateDto();
-        customer.setCustomerId(customerId);
-        customer.setCustomerPassword(password);
-        customer.setCustomerName(customerName);
-        customer.setCustomerPhoneNumber(customerPhoneNumber);
-        customer.setCustomerEmail(customerEmail);
-        customer.setCustomerBirthday(customerBirthday);
+        customerCreateDto.setCustomerId("modified customer");
+        customerCreateDto.setCustomerPassword(customerPassword);
+        customerCreateDto.setCustomerName(customerName);
+        customerCreateDto.setCustomerPhoneNumber(customerPhoneNumber);
+        customerCreateDto.setCustomerEmail(customerEmail);
+        customerCreateDto.setCustomerBirthday(customerBirthday);
 
         when(customerRepository.save(any())).thenReturn(customer);
 
@@ -83,18 +85,18 @@ public class CustomerServiceImplTest {
     @Test
     public void getCustomer() {
         //given
-        Customer customer = new Customer();
-        customer.setCustomerNo(1L);
-        customer.setCustomerId(customerId);
-        customer.setCustomerPassword(password);
-        customer.setCustomerName(customerName);
-        customer.setCustomerPhoneNumber(customerPhoneNumber);
-        customer.setCustomerEmail(customerEmail);
-        customer.setCustomerBirthday(customerBirthday);
-        customer.setCustomerRole(customerRole);
+        Customer customer = new Customer().builder()
+                .customerNo(1L)
+                .customerId(customerId)
+                .customerPassword(customerPassword)
+                .customerName(customerName)
+                .customerPhoneNumber(customerPhoneNumber)
+                .customerEmail(customerEmail)
+                .customerBirthday(customerBirthday)
+                .customerRole(customerRole).build();
 
         //when
-        when(customerRepository.findByCustomerNo(anyLong())).thenReturn(customer);
+        when(customerRepository.findById(anyLong())).thenReturn(Optional.ofNullable(customer));
 
         //then
         Customer result = customerService.getCustomer(1L);
@@ -104,37 +106,37 @@ public class CustomerServiceImplTest {
     @Test
     public void modifyCustomer() {
         //given
-        Customer customer = new Customer();
-        customer.setCustomerNo(1L);
-        customer.setCustomerId(customerId);
-        customer.setCustomerPassword(password);
-        customer.setCustomerName(customerName);
-        customer.setCustomerPhoneNumber(customerPhoneNumber);
-        customer.setCustomerEmail(customerEmail);
-        customer.setCustomerBirthday(customerBirthday);
-        customer.setCustomerRole(customerRole);
+        Customer customer = new Customer().builder()
+                .customerNo(1L)
+                .customerId(customerId)
+                .customerPassword(customerPassword)
+                .customerName(customerName)
+                .customerPhoneNumber(customerPhoneNumber)
+                .customerEmail(customerEmail)
+                .customerBirthday(customerBirthday)
+                .customerRole(customerRole).build();
 
         CustomerCreateDto customerCreateDto = new CustomerCreateDto();
-        customer.setCustomerId("modified customer");
-        customer.setCustomerPassword(password);
-        customer.setCustomerName(customerName);
-        customer.setCustomerPhoneNumber(customerPhoneNumber);
-        customer.setCustomerEmail(customerEmail);
-        customer.setCustomerBirthday(customerBirthday);
+        customerCreateDto.setCustomerId("modified customer");
+        customerCreateDto.setCustomerPassword(customerPassword);
+        customerCreateDto.setCustomerName(customerName);
+        customerCreateDto.setCustomerPhoneNumber(customerPhoneNumber);
+        customerCreateDto.setCustomerEmail(customerEmail);
+        customerCreateDto.setCustomerBirthday(customerBirthday);
 
-        Customer modifedCustomer = new Customer();
-        modifedCustomer.setCustomerNo(1L);
-        modifedCustomer.setCustomerId("modified customer");
-        modifedCustomer.setCustomerPassword(password);
-        modifedCustomer.setCustomerName(customerName);
-        modifedCustomer.setCustomerPhoneNumber(customerPhoneNumber);
-        modifedCustomer.setCustomerEmail(customerEmail);
-        modifedCustomer.setCustomerBirthday(customerBirthday);
-        modifedCustomer.setCustomerRole(customerRole);
+        Customer modifedCustomer = new Customer().builder()
+                .customerNo(1L)
+                .customerId("modifiedCustomer")
+                .customerPassword(customerPassword)
+                .customerName(customerName)
+                .customerPhoneNumber(customerPhoneNumber)
+                .customerEmail(customerEmail)
+                .customerBirthday(customerBirthday)
+                .customerRole(customerRole).build();
 
         //when
         when(customerRepository.save(any())).thenReturn(modifedCustomer);
-        when(customerRepository.findByCustomerNo(1L)).thenReturn(customer);
+        when(customerRepository.findById(1L)).thenReturn(Optional.ofNullable(customer));
         //then
         Customer result = customerService.modifyCustomer(1L,customerCreateDto);
 

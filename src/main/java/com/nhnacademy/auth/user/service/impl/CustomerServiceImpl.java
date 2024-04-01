@@ -9,6 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
@@ -18,36 +20,48 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer getCustomer(Long id) {
-        return customerRepository.findByCustomerNo(id);
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+        if (optionalCustomer.isPresent()) {
+            return optionalCustomer.get();
+        } else {
+            throw new RuntimeException("해당 유저를 찾을 수 없습니다.");
+        }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Customer createCustomer(CustomerCreateDto customerCreateDto) {
         String rawPassword = customerCreateDto.getCustomerPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
-        Customer customer = new Customer();
-        customer.setCustomerId(customerCreateDto.getCustomerId());
-        customer.setCustomerPassword(encPassword);
-        customer.setCustomerName(customerCreateDto.getCustomerName());
-        customer.setCustomerPhoneNumber(customerCreateDto.getCustomerPhoneNumber());
-        customer.setCustomerEmail(customerCreateDto.getCustomerEmail());
-        customer.setCustomerBirthday(customerCreateDto.getCustomerBirthday());
-        customer.setCustomerRole("ROLE_CUSTOMER"); //비회원 회원가입 false 회원 회원가입 true
+        Customer customer = new Customer().builder()
+                .customerId(customerCreateDto.getCustomerId())
+                .customerPassword(encPassword)
+                .customerName(customerCreateDto.getCustomerName())
+                .customerPhoneNumber(customerCreateDto.getCustomerPhoneNumber())
+                .customerEmail(customerCreateDto.getCustomerEmail())
+                .customerBirthday(customerCreateDto.getCustomerBirthday())
+                .customerRole("ROLE_CUSTOMER").build();
         return customerRepository.save(customer);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Customer modifyCustomer(Long id,CustomerCreateDto customerCreateDto) {
-        String rawPassword = customerCreateDto.getCustomerPassword();
-        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
-        Customer customer = customerRepository.findByCustomerNo(id);
-        customer.setCustomerId(customerCreateDto.getCustomerId());
-        customer.setCustomerPassword(encPassword);
-        customer.setCustomerName(customerCreateDto.getCustomerName());
-        customer.setCustomerPhoneNumber(customerCreateDto.getCustomerPhoneNumber());
-        customer.setCustomerEmail(customerCreateDto.getCustomerEmail());
-        customer.setCustomerBirthday(customerCreateDto.getCustomerBirthday());
-        return customerRepository.save(customer);
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+        if (optionalCustomer.isPresent()) {
+            String rawPassword = customerCreateDto.getCustomerPassword();
+            String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+            Customer customer = new Customer().builder()
+                    .customerId(customerCreateDto.getCustomerId())
+                    .customerPassword(encPassword)
+                    .customerName(customerCreateDto.getCustomerName())
+                    .customerPhoneNumber(customerCreateDto.getCustomerPhoneNumber())
+                    .customerEmail(customerCreateDto.getCustomerEmail())
+                    .customerBirthday(customerCreateDto.getCustomerBirthday())
+                    .customerRole("ROLE_CUSTOMER").build();
+            return customerRepository.save(customer);
+        } else {
+            throw new RuntimeException("해당 유저를 찾을 수 없습니다.");
+        }
+
     }
 }
