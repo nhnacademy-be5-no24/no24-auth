@@ -4,7 +4,6 @@ import com.nhnacademy.auth.user.dto.CustomerCreateDto;
 import com.nhnacademy.auth.user.entity.Customer;
 import com.nhnacademy.auth.user.service.CustomerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,11 +27,6 @@ public class CustomerController {
         return customerService.modifyCustomer(id, customerCreateDto);
     }
 
-    //로그인 확인을 위한 home화면
-    @GetMapping("/")
-    public @ResponseBody String home() {
-        return "home";
-    }
 
     //로그인 확인을 위한 로그인폼
     @GetMapping("/loginForm")

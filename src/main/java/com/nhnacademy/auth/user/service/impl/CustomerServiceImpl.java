@@ -1,14 +1,17 @@
 package com.nhnacademy.auth.user.service.impl;
 
+import com.nhnacademy.auth.exception.CustomerNotFoundException;
 import com.nhnacademy.auth.user.dto.CustomerCreateDto;
 import com.nhnacademy.auth.user.entity.Customer;
+import com.nhnacademy.auth.user.entity.Role;
 import com.nhnacademy.auth.user.repository.CustomerRepository;
 import com.nhnacademy.auth.user.service.CustomerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,36 +22,48 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer getCustomer(Long id) {
-        return customerRepository.findByCustomerNo(id);
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+        if (optionalCustomer.isPresent()) {
+            return optionalCustomer.get();
+        } else {
+            throw new CustomerNotFoundException(id);
+        }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Customer createCustomer(CustomerCreateDto customerCreateDto) {
         String rawPassword = customerCreateDto.getCustomerPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
-        Customer customer = new Customer();
-        customer.setCustomerId(customerCreateDto.getCustomerId());
-        customer.setCustomerPassword(encPassword);
-        customer.setCustomerName(customerCreateDto.getCustomerName());
-        customer.setCustomerPhoneNumber(customerCreateDto.getCustomerPhoneNumber());
-        customer.setCustomerEmail(customerCreateDto.getCustomerEmail());
-        customer.setCustomerBirthday(customerCreateDto.getCustomerBirthday());
-        customer.setCustomerRole("ROLE_CUSTOMER"); //비회원 회원가입 false 회원 회원가입 true
+        Customer customer = Customer.builder()
+                .customerId(customerCreateDto.getCustomerId())
+                .customerPassword(encPassword)
+                .customerName(customerCreateDto.getCustomerName())
+                .customerPhoneNumber(customerCreateDto.getCustomerPhoneNumber())
+                .customerEmail(customerCreateDto.getCustomerEmail())
+                .customerBirthday(customerCreateDto.getCustomerBirthday())
+                .customerRole(Role.ROLE_CUSTOMER.toString()).build();
         return customerRepository.save(customer);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Customer modifyCustomer(Long id,CustomerCreateDto customerCreateDto) {
-        String rawPassword = customerCreateDto.getCustomerPassword();
-        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
-        Customer customer = customerRepository.findByCustomerNo(id);
-        customer.setCustomerId(customerCreateDto.getCustomerId());
-        customer.setCustomerPassword(encPassword);
-        customer.setCustomerName(customerCreateDto.getCustomerName());
-        customer.setCustomerPhoneNumber(customerCreateDto.getCustomerPhoneNumber());
-        customer.setCustomerEmail(customerCreateDto.getCustomerEmail());
-        customer.setCustomerBirthday(customerCreateDto.getCustomerBirthday());
-        return customerRepository.save(customer);
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+        if (optionalCustomer.isPresent()) {
+            String rawPassword = customerCreateDto.getCustomerPassword();
+            String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+            Customer customer = Customer.builder()
+                    .customerId(customerCreateDto.getCustomerId())
+                    .customerPassword(encPassword)
+                    .customerName(customerCreateDto.getCustomerName())
+                    .customerPhoneNumber(customerCreateDto.getCustomerPhoneNumber())
+                    .customerEmail(customerCreateDto.getCustomerEmail())
+                    .customerBirthday(customerCreateDto.getCustomerBirthday())
+                    .customerRole(Role.ROLE_CUSTOMER.toString()).build();
+            return customerRepository.save(customer);
+        } else {
+            throw new CustomerNotFoundException(id);
+        }
+
     }
 }

@@ -1,11 +1,14 @@
 package com.nhnacademy.auth.user.service.impl;
 
+import com.nhnacademy.auth.exception.GradeNotFoundException;
 import com.nhnacademy.auth.user.dto.GradeCreateDto;
 import com.nhnacademy.auth.user.entity.Grade;
 import com.nhnacademy.auth.user.repository.GradeRepository;
 import com.nhnacademy.auth.user.service.GradeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -14,28 +17,45 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public Grade getGrade(Long id) {
-        return gradeRepository.findById(id).orElse(null);
+        Optional<Grade> optionalGrade = gradeRepository.findById(id);
+        if (optionalGrade.isPresent()) {
+            return optionalGrade.get();
+        }else {
+            throw new GradeNotFoundException(id);
+        }
     }
 
     @Override
     public Grade createGrade(GradeCreateDto gradeCreateDto) {
-        Grade grade = new Grade();
-        grade.setGradeName(gradeCreateDto.getGradeName());
-        grade.setAccumulateRate(gradeCreateDto.getAccumulateRate());
+        Grade grade = Grade.builder()
+                .gradeName(gradeCreateDto.getGradeName())
+                .accumulateRate(gradeCreateDto.getAccumulateRate())
+                .build();
         return gradeRepository.save(grade);
     }
 
     @Override
     public Grade modifyGrade(Long id, GradeCreateDto gradeCreateDto) {
-        Grade grade = gradeRepository.findById(id).orElse(null);
-        grade.setGradeName(gradeCreateDto.getGradeName());
-        grade.setAccumulateRate(gradeCreateDto.getAccumulateRate());
-        return gradeRepository.save(grade);
-
+        Optional<Grade> optionalGrade = gradeRepository.findById(id);
+        if (optionalGrade.isPresent()) {
+            Grade grade = Grade.builder()
+                    .gradeId(id)
+                    .gradeName(gradeCreateDto.getGradeName())
+                    .accumulateRate(gradeCreateDto.getAccumulateRate())
+                    .build();
+            return gradeRepository.save(grade);
+        } else {
+            throw new GradeNotFoundException(id);
+        }
     }
 
     @Override
-    public void deleteGrade(Long id) {
-        gradeRepository.deleteById(id);
+    public Grade deleteGrade(Long id) {
+        Optional<Grade> optionalGrade = gradeRepository.findById(id);
+        if (optionalGrade.isPresent()) {
+            return gradeRepository.deleteByGradeId(id);
+        } else {
+            throw new GradeNotFoundException(id);
+        }
     }
 }
