@@ -18,14 +18,12 @@ public class MemberController {
 
     @PostMapping("/member/create")
     public Member createMember(@RequestBody MemberCreateDto memberCreateDto) {
-        Member member = memberService.createMember(memberCreateDto);
-        return member;
+        return memberService.createMember(memberCreateDto);
     }
 
     @PutMapping("/member/{id}")
     public Member updateMember(@PathVariable Long id,@RequestBody MemberCreateDto memberCreateDto) {
-        Member member = memberService.modifyMember(id,memberCreateDto);
-        return member;
+        return memberService.modifyMember(id,memberCreateDto);
     }
 
     @PutMapping("/member/delete/{id}")

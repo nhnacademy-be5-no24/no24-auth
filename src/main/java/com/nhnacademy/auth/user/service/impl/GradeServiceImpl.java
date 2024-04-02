@@ -1,5 +1,6 @@
 package com.nhnacademy.auth.user.service.impl;
 
+import com.nhnacademy.auth.exception.GradeNotFoundException;
 import com.nhnacademy.auth.user.dto.GradeCreateDto;
 import com.nhnacademy.auth.user.entity.Grade;
 import com.nhnacademy.auth.user.repository.GradeRepository;
@@ -20,13 +21,13 @@ public class GradeServiceImpl implements GradeService {
         if (optionalGrade.isPresent()) {
             return optionalGrade.get();
         }else {
-            throw new RuntimeException("등록되지 않은 등급입니다.");
+            throw new GradeNotFoundException(id);
         }
     }
 
     @Override
     public Grade createGrade(GradeCreateDto gradeCreateDto) {
-        Grade grade = new Grade().builder()
+        Grade grade = Grade.builder()
                 .gradeName(gradeCreateDto.getGradeName())
                 .accumulateRate(gradeCreateDto.getAccumulateRate())
                 .build();
@@ -37,14 +38,14 @@ public class GradeServiceImpl implements GradeService {
     public Grade modifyGrade(Long id, GradeCreateDto gradeCreateDto) {
         Optional<Grade> optionalGrade = gradeRepository.findById(id);
         if (optionalGrade.isPresent()) {
-            Grade grade = new Grade().builder()
+            Grade grade = Grade.builder()
                     .gradeId(id)
                     .gradeName(gradeCreateDto.getGradeName())
                     .accumulateRate(gradeCreateDto.getAccumulateRate())
                     .build();
             return gradeRepository.save(grade);
         } else {
-            throw new RuntimeException("등록되지 않은 등급입니다.");
+            throw new GradeNotFoundException(id);
         }
     }
 
@@ -54,7 +55,7 @@ public class GradeServiceImpl implements GradeService {
         if (optionalGrade.isPresent()) {
             return gradeRepository.deleteByGradeId(id);
         } else {
-            throw new RuntimeException("등록되지 않은 등급입니다.");
+            throw new GradeNotFoundException(id);
         }
     }
 }

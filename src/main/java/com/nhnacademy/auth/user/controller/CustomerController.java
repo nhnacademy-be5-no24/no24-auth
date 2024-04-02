@@ -27,11 +27,6 @@ public class CustomerController {
         return customerService.modifyCustomer(id, customerCreateDto);
     }
 
-    //로그인 확인을 위한 home화면
-    @GetMapping("/")
-    public @ResponseBody String home() {
-        return "home";
-    }
 
     //로그인 확인을 위한 로그인폼
     @GetMapping("/loginForm")
