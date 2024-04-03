@@ -9,33 +9,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
-public class CustomerServiceImplTest {
+class CustomerServiceImplTest {
 
     @Mock
     CustomerRepository customerRepository;
@@ -57,7 +45,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void createCustomer() {
+    void createCustomer() {
 
         Customer customer = new Customer().builder()
                 .customerNo(1L)
@@ -80,10 +68,10 @@ public class CustomerServiceImplTest {
         when(customerRepository.save(any())).thenReturn(customer);
 
         Customer result = customerService.createCustomer(customerCreateDto);
-        assertThat(customerId).isEqualTo(result.getCustomerId());
+        assertThat(result.getCustomerId()).isEqualTo(customerId);
     }
     @Test
-    public void getCustomer() {
+    void getCustomer() {
         //given
         Customer customer = new Customer().builder()
                 .customerNo(1L)
@@ -100,11 +88,11 @@ public class CustomerServiceImplTest {
 
         //then
         Customer result = customerService.getCustomer(1L);
-        assertThat(customer).isEqualTo(result);
+        assertThat(result).isEqualTo(customer);
     }
 
     @Test
-    public void modifyCustomer() {
+    void modifyCustomer() {
         //given
         Customer customer = new Customer().builder()
                 .customerNo(1L)
@@ -140,8 +128,8 @@ public class CustomerServiceImplTest {
         //then
         Customer result = customerService.modifyCustomer(1L,customerCreateDto);
 
-        assertThat(modifedCustomer.getCustomerId()).isEqualTo(result.getCustomerId());
-        assertThat(modifedCustomer).isEqualTo(result);
+        assertThat(result.getCustomerId()).isEqualTo(modifedCustomer.getCustomerId());
+        assertThat(result).isEqualTo(modifedCustomer);
     }
 
 }

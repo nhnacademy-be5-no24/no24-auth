@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class GradeServiceImplTest {
+class GradeServiceImplTest {
     @Mock
     GradeRepository gradeRepository;
 
@@ -47,7 +47,7 @@ public class GradeServiceImplTest {
 
         //then
         Grade result = gradeService.createGrade(gradeCreateDto);
-        assertThat(grade).isEqualTo(result);
+        assertThat(result).isEqualTo(grade);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class GradeServiceImplTest {
 
         //then
         Grade result = gradeService.getGrade(1L);
-        assertThat(grade).isEqualTo(result);
+        assertThat(result).isEqualTo(grade);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class GradeServiceImplTest {
 
         //then
         Grade result = gradeService.modifyGrade(1L, gradeCreateDto);
-        assertThat(modifiedGrade).isEqualTo(result);
+        assertThat(result).isEqualTo(modifiedGrade);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class GradeServiceImplTest {
 
         //then
         Grade result = gradeService.deleteGrade(1L);
-        assertThat(grade).isEqualTo(result);
+        assertThat(result).isEqualTo(grade);
 
     }
 
