@@ -149,7 +149,6 @@ class MemberServiceImplTest {
         when(memberRepository.save(any())).thenReturn(member);
         when(gradeRepository.findById(1L)).thenReturn(Optional.ofNullable(grade));
         when(customerRepository.findById(1L)).thenReturn(Optional.ofNullable(customer));
-        when(memberRepository.findById(1L)).thenReturn(Optional.ofNullable(member));
 
         //then
         Member result = memberService.modifyMember(1L, memberCreateDto);
