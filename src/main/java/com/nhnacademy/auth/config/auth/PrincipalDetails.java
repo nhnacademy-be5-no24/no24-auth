@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class PrincipalDetails implements UserDetails {
-    private Customer customer;
+    private transient Customer customer;
 
     public PrincipalDetails(Customer customer) {
         this.customer = customer;
@@ -17,12 +17,7 @@ public class PrincipalDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
-        collection.add(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return customer.getCustomerRole();
-            }
-        });
+        collection.add(() -> customer.getCustomerRole());
         return collection;
     }
 
