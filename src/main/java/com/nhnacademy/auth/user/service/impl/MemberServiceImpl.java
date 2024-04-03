@@ -17,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -50,22 +49,19 @@ public class MemberServiceImpl implements MemberService {
 
         customer = customerRepository.save(customer);
 
-        Optional<Grade> optionalGrade = gradeRepository.findById(memberCreateDto.getGradeId());
-        if (optionalGrade.isPresent()) {
-            Grade grade = optionalGrade.get();
-            Member member = Member.builder()
-                    .customerNo(customer.getCustomerNo())
-                    .customer(customer)
-                    .memberId(memberCreateDto.getCustomerId())
-                    .lastLoginAt(LocalDateTime.now())
-                    .grade(grade)
-                    .isActive(true)
-                    .isLeave(false)
-                    .role(Role.ROLE_MEMBER.toString()).build();
-            return memberRepository.save(member);
-        } else {
-            throw new GradeNotFoundException(optionalGrade.get().getGradeId());
-        }
+        Grade grade = gradeRepository.findById(memberCreateDto.getGradeId()).orElseThrow(() -> new GradeNotFoundException(memberCreateDto.getGradeId()));
+
+        Member member = Member.builder()
+                .customerNo(customer.getCustomerNo())
+                .customer(customer)
+                .memberId(memberCreateDto.getCustomerId())
+                .lastLoginAt(LocalDateTime.now())
+                .grade(grade)
+                .isActive(true)
+                .isLeave(false)
+                .role(Role.ROLE_MEMBER.toString()).build();
+        return memberRepository.save(member);
+
     }
 
     @Override
@@ -85,7 +81,6 @@ public class MemberServiceImpl implements MemberService {
                 .customerBirthday(memberCreateDto.getCustomerBirthday())
                 .customerRole("ROLE_MEMBER").build();
         Grade optionalGrade = gradeRepository.findById(memberCreateDto.getGradeId()).orElseThrow(() -> new RuntimeException("해당 등급을 찾을 수 없습니다. " + memberCreateDto.getGradeId()));
-        memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException(id));
 
         Member member = Member.builder()
                 .customerNo(customer.getCustomerNo())
