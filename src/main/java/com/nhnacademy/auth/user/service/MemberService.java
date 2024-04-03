@@ -1,6 +1,6 @@
 package com.nhnacademy.auth.user.service;
 
-import com.nhnacademy.auth.user.dto.MemberCreateDto;
+import com.nhnacademy.auth.user.dto.request.MemberCreateDto;
 import com.nhnacademy.auth.user.entity.Member;
 
 public interface MemberService {

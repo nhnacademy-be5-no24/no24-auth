@@ -2,7 +2,7 @@ package com.nhnacademy.auth.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.nhnacademy.auth.user.dto.MemberCreateDto;
+import com.nhnacademy.auth.user.dto.request.MemberCreateDto;
 import com.nhnacademy.auth.user.entity.Grade;
 import com.nhnacademy.auth.user.entity.Member;
 import com.nhnacademy.auth.user.service.MemberService;

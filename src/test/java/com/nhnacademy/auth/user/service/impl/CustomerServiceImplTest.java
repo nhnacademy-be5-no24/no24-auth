@@ -1,6 +1,6 @@
 package com.nhnacademy.auth.user.service.impl;
 
-import com.nhnacademy.auth.user.dto.CustomerCreateDto;
+import com.nhnacademy.auth.user.dto.request.CustomerCreateDto;
 import com.nhnacademy.auth.user.entity.Customer;
 import com.nhnacademy.auth.user.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;

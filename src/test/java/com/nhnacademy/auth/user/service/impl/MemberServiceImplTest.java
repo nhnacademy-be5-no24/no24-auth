@@ -1,6 +1,6 @@
 package com.nhnacademy.auth.user.service.impl;
 
-import com.nhnacademy.auth.user.dto.MemberCreateDto;
+import com.nhnacademy.auth.user.dto.request.MemberCreateDto;
 import com.nhnacademy.auth.user.entity.Customer;
 import com.nhnacademy.auth.user.entity.Grade;
 import com.nhnacademy.auth.user.entity.Member;
@@ -149,7 +149,6 @@ class MemberServiceImplTest {
         when(memberRepository.save(any())).thenReturn(member);
         when(gradeRepository.findById(1L)).thenReturn(Optional.ofNullable(grade));
         when(customerRepository.findById(1L)).thenReturn(Optional.ofNullable(customer));
-
         //then
         Member result = memberService.modifyMember(1L, memberCreateDto);
         assertThat(member).isEqualTo(result);
