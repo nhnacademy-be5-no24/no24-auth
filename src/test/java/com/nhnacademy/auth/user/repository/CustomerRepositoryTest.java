@@ -4,38 +4,31 @@ import com.nhnacademy.auth.user.entity.Customer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
-
+@ExtendWith(SpringExtension.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Transactional
 @ActiveProfiles("dev")
-public class CustomerRepositoryTest {
+@WebAppConfiguration
+class CustomerRepositoryTest {
 
     @Autowired
-    CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @Test
     @DisplayName("고유Id로 고객 찾기")
     void findByCustomerNo() {
+        customerRepository.deleteAll();
         //given
         Customer customer = new Customer().builder()
                 .customerId("customer")
@@ -49,10 +42,11 @@ public class CustomerRepositoryTest {
         Customer savedCustomer = customerRepository.save(customer);
 
         //when
-        Optional<Customer> result = customerRepository.findById(savedCustomer.getCustomerNo());
+        Optional<Customer> optionalCustomer = customerRepository.findById(savedCustomer.getCustomerNo());
+        Customer result = optionalCustomer.get();
 
         //then
-        assertThat(savedCustomer).isEqualTo(result.get());
+        assertThat(result).isEqualTo(savedCustomer);
     }
 
     @Test
@@ -74,7 +68,7 @@ public class CustomerRepositoryTest {
         Customer result = customerRepository.findByCustomerId(savedCustomer.getCustomerId());
 
         //then
-        assertThat(savedCustomer).isEqualTo(result);
+        assertThat(result).isEqualTo(savedCustomer);
     }
 
 }

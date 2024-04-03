@@ -4,30 +4,34 @@ import com.nhnacademy.auth.user.dto.GradeCreateDto;
 import com.nhnacademy.auth.user.entity.Grade;
 import com.nhnacademy.auth.user.service.GradeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/auth")
 public class GradeController {
     private final GradeService gradeService;
 
     @GetMapping("/grade/{id}")
-    public Grade getGrade(@PathVariable Long id) {
-        return gradeService.getGrade(id);
+    public ResponseEntity<Grade> getGrade(@PathVariable Long id) {
+        return ResponseEntity.ok().body(gradeService.getGrade(id));
     }
 
     @PostMapping("/grade/create")
-    public Grade createGrade(@RequestBody GradeCreateDto gradeCreateDto) {
-        return gradeService.createGrade(gradeCreateDto);
+    public ResponseEntity<Grade> createGrade(@RequestBody GradeCreateDto gradeCreateDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(gradeService.createGrade(gradeCreateDto));
     }
 
     @PutMapping("/grade/{id}")
-    public Grade updateGrade(@PathVariable Long id, @RequestBody GradeCreateDto gradeCreateDto) {
-        return gradeService.modifyGrade(id, gradeCreateDto);
+    public ResponseEntity<Grade> updateGrade(@PathVariable Long id, @RequestBody GradeCreateDto gradeCreateDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(gradeService.modifyGrade(id, gradeCreateDto));
     }
 
     @DeleteMapping("/grade/{id}")
-    public void deleteGrade(@PathVariable Long id) {
+    public ResponseEntity<Grade> deleteGrade(@PathVariable Long id) {
         gradeService.deleteGrade(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

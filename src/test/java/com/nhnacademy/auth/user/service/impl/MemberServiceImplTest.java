@@ -19,14 +19,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class MemberServiceImplTest {
+class MemberServiceImplTest {
     @Mock
     CustomerRepository customerRepository;
     @Mock
@@ -245,6 +243,6 @@ public class MemberServiceImplTest {
         //then
         Member result = memberService.deleteMember(1L);
         assertThat(updatedMember).isEqualTo(result);
-        assertThat(true).isEqualTo(result.getIsLeave());
+        assertThat(result.getIsLeave()).isTrue();
     }
 }
