@@ -1,7 +1,8 @@
 package com.nhnacademy.auth.user.controller;
 
 
-import com.nhnacademy.auth.user.dto.request.CustomerCreateDto;
+import com.nhnacademy.auth.user.dto.reponse.CustomerDto;
+import com.nhnacademy.auth.user.dto.request.CustomerCreateRequest;
 import com.nhnacademy.auth.user.entity.Customer;
 import com.nhnacademy.auth.user.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -22,19 +23,19 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping("/customer/{customerNo}")
-    public ResponseEntity<Customer> getCustomer(@PathVariable Long customerNo) {
-        Customer customer = customerService.getCustomer(customerNo);
-        return ResponseEntity.ok(customer);
+    public ResponseEntity<CustomerDto> getCustomer(@PathVariable Long customerNo) {
+        CustomerDto customerDto = customerService.getCustomer(customerNo);
+        return ResponseEntity.ok(customerDto);
     }
 
     @PostMapping("/customer/create")
-    public ResponseEntity<Customer> createCustomer(@RequestBody CustomerCreateDto customerCreateDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.createCustomer(customerCreateDto));
+    public ResponseEntity<CustomerDto> createCustomer(@RequestBody CustomerCreateRequest customerCreateRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.createCustomer(customerCreateRequest));
     }
 
     @PutMapping("/customer/update/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody CustomerCreateDto customerCreateDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.modifyCustomer(id, customerCreateDto));
+    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable Long id, @RequestBody CustomerCreateRequest customerCreateRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.modifyCustomer(id, customerCreateRequest));
     }
 
 }

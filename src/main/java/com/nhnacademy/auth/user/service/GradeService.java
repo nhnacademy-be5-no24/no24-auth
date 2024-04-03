@@ -1,15 +1,14 @@
 package com.nhnacademy.auth.user.service;
 
-import com.nhnacademy.auth.user.dto.request.GradeCreateDto;
-import com.nhnacademy.auth.user.entity.Grade;
+import com.nhnacademy.auth.user.dto.reponse.GradeDto;
 
 public interface GradeService {
-    Grade getGrade(Long id);
+    GradeDto getGrade(Long id);
 
-    Grade createGrade(GradeCreateDto gradeCreateDto);
+    GradeDto createGrade(GradeDto gradeDto);
 
-    Grade modifyGrade(Long id, GradeCreateDto gradeCreateDto);
+    GradeDto modifyGrade(Long id, GradeDto gradeDto);
 
-    Grade deleteGrade(Long id);
+    GradeDto deleteGrade(Long id);
 
 }

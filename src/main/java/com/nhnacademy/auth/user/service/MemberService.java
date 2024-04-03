@@ -1,13 +1,13 @@
 package com.nhnacademy.auth.user.service;
 
-import com.nhnacademy.auth.user.dto.request.MemberCreateDto;
-import com.nhnacademy.auth.user.entity.Member;
+import com.nhnacademy.auth.user.dto.reponse.MemberDto;
+import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
 
 public interface MemberService {
-    Member getMember(Long id);
-    Member createMember(MemberCreateDto memberCreateDto);
+    MemberDto getMember(Long id);
+    MemberDto createMember(MemberCreateRequest memberCreateRequest);
 
-    Member modifyMember(Long id,MemberCreateDto memberCreateDto);
+    MemberDto modifyMember(Long id, MemberCreateRequest memberCreateRequest);
 
-    Member deleteMember(Long id);
+    MemberDto deleteMember(Long id);
 }

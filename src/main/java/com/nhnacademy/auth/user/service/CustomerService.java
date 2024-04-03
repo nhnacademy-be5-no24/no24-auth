@@ -1,13 +1,13 @@
 package com.nhnacademy.auth.user.service;
 
-import com.nhnacademy.auth.user.dto.request.CustomerCreateDto;
-import com.nhnacademy.auth.user.entity.Customer;
+import com.nhnacademy.auth.user.dto.reponse.CustomerDto;
+import com.nhnacademy.auth.user.dto.request.CustomerCreateRequest;
 
 public interface CustomerService {
-    Customer getCustomer(Long id);
+    CustomerDto getCustomer(Long id);
 
-    Customer createCustomer(CustomerCreateDto customerCreateDto);
+    CustomerDto createCustomer(CustomerCreateRequest customerCreateRequest);
 
-    Customer modifyCustomer(Long id,CustomerCreateDto customerCreateDto);
+    CustomerDto modifyCustomer(Long id, CustomerCreateRequest customerCreateRequest);
 
 }

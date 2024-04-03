@@ -1,6 +1,7 @@
 package com.nhnacademy.auth.user.controller;
 
-import com.nhnacademy.auth.user.dto.request.MemberCreateDto;
+import com.nhnacademy.auth.user.dto.reponse.MemberDto;
+import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
 import com.nhnacademy.auth.user.entity.Member;
 import com.nhnacademy.auth.user.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -15,22 +16,22 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/member/{id}")
-    public ResponseEntity<Member> getMember(@PathVariable Long id) {
+    public ResponseEntity<MemberDto> getMember(@PathVariable Long id) {
         return ResponseEntity.ok().body(memberService.getMember(id));
     }
 
     @PostMapping("/member/create")
-    public ResponseEntity<Member> createMember(@RequestBody MemberCreateDto memberCreateDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.createMember(memberCreateDto));
+    public ResponseEntity<MemberDto> createMember(@RequestBody MemberCreateRequest memberCreateRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.createMember(memberCreateRequest));
     }
 
     @PutMapping("/member/{id}")
-    public ResponseEntity<Member> updateMember(@PathVariable Long id,@RequestBody MemberCreateDto memberCreateDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.modifyMember(id,memberCreateDto));
+    public ResponseEntity<MemberDto> updateMember(@PathVariable Long id,@RequestBody MemberCreateRequest memberCreateRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.modifyMember(id, memberCreateRequest));
     }
 
     @DeleteMapping("/member/{id}")
-    public ResponseEntity<Member> deleteMember(@PathVariable Long id) {
+    public ResponseEntity<MemberDto> deleteMember(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(memberService.deleteMember(id));
     }
 }

@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-public class MemberCreateDto {
+public class CustomerCreateRequest {
     private String customerId;
     private String customerPassword;
     private String customerName;
@@ -19,5 +19,4 @@ public class MemberCreateDto {
     private String customerEmail;
     private LocalDate customerBirthday;
 
-    private Long gradeId;
 }
