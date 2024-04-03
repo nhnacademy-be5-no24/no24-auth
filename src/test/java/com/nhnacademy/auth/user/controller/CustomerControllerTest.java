@@ -2,7 +2,7 @@ package com.nhnacademy.auth.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.nhnacademy.auth.user.dto.CustomerCreateDto;
+import com.nhnacademy.auth.user.dto.request.CustomerCreateDto;
 import com.nhnacademy.auth.user.entity.Customer;
 import com.nhnacademy.auth.user.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,7 +1,7 @@
 package com.nhnacademy.auth.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.auth.user.dto.GradeCreateDto;
+import com.nhnacademy.auth.user.dto.request.GradeCreateDto;
 import com.nhnacademy.auth.user.entity.Grade;
 
 import com.nhnacademy.auth.user.service.GradeService;

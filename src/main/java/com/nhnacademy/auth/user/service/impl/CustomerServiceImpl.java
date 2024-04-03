@@ -1,7 +1,7 @@
 package com.nhnacademy.auth.user.service.impl;
 
 import com.nhnacademy.auth.exception.CustomerNotFoundException;
-import com.nhnacademy.auth.user.dto.CustomerCreateDto;
+import com.nhnacademy.auth.user.dto.request.CustomerCreateDto;
 import com.nhnacademy.auth.user.entity.Customer;
 import com.nhnacademy.auth.user.entity.Role;
 import com.nhnacademy.auth.user.repository.CustomerRepository;
@@ -21,6 +21,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
+    @Transactional(readOnly = true)
     public Customer getCustomer(Long id) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
         if (optionalCustomer.isPresent()) {
@@ -30,7 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
     public Customer createCustomer(CustomerCreateDto customerCreateDto) {
         String rawPassword = customerCreateDto.getCustomerPassword();
@@ -45,7 +46,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .customerRole(Role.ROLE_CUSTOMER.toString()).build();
         return customerRepository.save(customer);
     }
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
     public Customer modifyCustomer(Long id,CustomerCreateDto customerCreateDto) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);

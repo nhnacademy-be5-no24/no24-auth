@@ -2,7 +2,7 @@ package com.nhnacademy.auth.user.service.impl;
 
 import com.nhnacademy.auth.exception.GradeNotFoundException;
 import com.nhnacademy.auth.exception.MemberNotFoundException;
-import com.nhnacademy.auth.user.dto.MemberCreateDto;
+import com.nhnacademy.auth.user.dto.request.MemberCreateDto;
 import com.nhnacademy.auth.user.entity.Customer;
 import com.nhnacademy.auth.user.entity.Grade;
 import com.nhnacademy.auth.user.entity.Member;
@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -29,11 +30,13 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public Member getMember(Long id) {
         return memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException(id));
     }
 
     @Override
+    @Transactional
     public Member createMember(MemberCreateDto memberCreateDto) {
         String rawPassword = memberCreateDto.getCustomerPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
@@ -65,6 +68,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public Member modifyMember(Long id, MemberCreateDto memberCreateDto) {
         String rawPassword = memberCreateDto.getCustomerPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
@@ -96,6 +100,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
+    @Transactional
     public Member deleteMember(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 멤버를 찾을 수 없습니다."));
         Member updatedMember = Member.builder()

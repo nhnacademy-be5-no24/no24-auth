@@ -1,6 +1,6 @@
 package com.nhnacademy.auth.user.service;
 
-import com.nhnacademy.auth.user.dto.GradeCreateDto;
+import com.nhnacademy.auth.user.dto.request.GradeCreateDto;
 import com.nhnacademy.auth.user.entity.Grade;
 
 public interface GradeService {

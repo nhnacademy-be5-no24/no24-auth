@@ -1,13 +1,19 @@
 package com.nhnacademy.auth.user.controller;
 
-import com.nhnacademy.auth.user.dto.CustomerCreateDto;
+
+import com.nhnacademy.auth.user.dto.request.CustomerCreateDto;
 import com.nhnacademy.auth.user.entity.Customer;
 import com.nhnacademy.auth.user.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+/**
+ * 고객(Customer) RestController 입니다.
+ *
+ * @author : 김병주
+ * @date : 2024-03-29
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
@@ -15,9 +21,9 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    @GetMapping("/customer/{id}")
-    public ResponseEntity<Customer> getCustomer(@PathVariable Long id) {
-        Customer customer = customerService.getCustomer(id);
+    @GetMapping("/customer/{customerNo}")
+    public ResponseEntity<Customer> getCustomer(@PathVariable Long customerNo) {
+        Customer customer = customerService.getCustomer(customerNo);
         return ResponseEntity.ok(customer);
     }
 

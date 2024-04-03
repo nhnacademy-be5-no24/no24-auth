@@ -1,12 +1,13 @@
 package com.nhnacademy.auth.user.service.impl;
 
 import com.nhnacademy.auth.exception.GradeNotFoundException;
-import com.nhnacademy.auth.user.dto.GradeCreateDto;
+import com.nhnacademy.auth.user.dto.request.GradeCreateDto;
 import com.nhnacademy.auth.user.entity.Grade;
 import com.nhnacademy.auth.user.repository.GradeRepository;
 import com.nhnacademy.auth.user.service.GradeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ public class GradeServiceImpl implements GradeService {
     private final GradeRepository gradeRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public Grade getGrade(Long id) {
         Optional<Grade> optionalGrade = gradeRepository.findById(id);
         if (optionalGrade.isPresent()) {
@@ -26,6 +28,7 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
+    @Transactional
     public Grade createGrade(GradeCreateDto gradeCreateDto) {
         Grade grade = Grade.builder()
                 .gradeName(gradeCreateDto.getGradeName())
@@ -35,6 +38,7 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
+    @Transactional
     public Grade modifyGrade(Long id, GradeCreateDto gradeCreateDto) {
         Optional<Grade> optionalGrade = gradeRepository.findById(id);
         if (optionalGrade.isPresent()) {
@@ -50,6 +54,7 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
+    @Transactional
     public Grade deleteGrade(Long id) {
         Optional<Grade> optionalGrade = gradeRepository.findById(id);
         if (optionalGrade.isPresent()) {
