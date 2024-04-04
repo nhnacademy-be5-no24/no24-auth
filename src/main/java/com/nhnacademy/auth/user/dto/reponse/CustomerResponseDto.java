@@ -1,4 +1,4 @@
-package com.nhnacademy.auth.user.dto;
+package com.nhnacademy.auth.user.dto.reponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,13 +9,14 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-@Builder
 @AllArgsConstructor
-public class CustomerCreateDto {
+@Builder
+public class CustomerResponseDto {
     private String customerId;
     private String customerPassword;
     private String customerName;
     private String customerPhoneNumber;
     private String customerEmail;
     private LocalDate customerBirthday;
+    private String  customerRole;
 }

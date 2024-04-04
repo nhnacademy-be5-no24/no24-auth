@@ -6,11 +6,11 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Data
 @Builder
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Customer {
     @Id
     @Column(name = "customer_no")

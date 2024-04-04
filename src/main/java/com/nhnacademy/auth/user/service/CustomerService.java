@@ -1,6 +1,6 @@
 package com.nhnacademy.auth.user.service;
 
-import com.nhnacademy.auth.user.dto.CustomerCreateDto;
+import com.nhnacademy.auth.user.dto.request.CustomerCreateDto;
 import com.nhnacademy.auth.user.entity.Customer;
 
 public interface CustomerService {
