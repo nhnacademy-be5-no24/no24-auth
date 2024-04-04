@@ -3,12 +3,18 @@ package com.nhnacademy.auth.user.controller;
 
 import com.nhnacademy.auth.user.dto.reponse.CustomerDto;
 import com.nhnacademy.auth.user.dto.request.CustomerCreateRequest;
-import com.nhnacademy.auth.user.entity.Customer;
 import com.nhnacademy.auth.user.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 고객(Customer) RestController 입니다.
  *
@@ -39,7 +45,7 @@ public class CustomerController {
      * @return 성공했을 때 응답코드 200 OK 반환합니다.
      */
     @PostMapping("/customer/create")
-    public ResponseEntity<CustomerDto> createCustomer(@RequestBody CustomerCreateRequest customerCreateRequest) {
+    public ResponseEntity<CustomerDto> createCustomer(@Valid @RequestBody CustomerCreateRequest customerCreateRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerService.createCustomer(customerCreateRequest));
     }
     /**
@@ -49,8 +55,21 @@ public class CustomerController {
      * @return 성공했을 때 응답코드 200 OK 반환합니다.
      */
     @PutMapping("/customer/update/{id}")
-    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable Long id, @RequestBody CustomerCreateRequest customerCreateRequest) {
+    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable Long id,@Valid @RequestBody CustomerCreateRequest customerCreateRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerService.modifyCustomer(id, customerCreateRequest));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex){
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error)->{
+            String fieldName=((FieldError)error).getField();
+            String errorMessage=error.getDefaultMessage();
+            errors.put(fieldName,errorMessage);
+        });
+        return errors;
     }
 
 }

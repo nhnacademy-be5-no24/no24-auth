@@ -2,12 +2,18 @@ package com.nhnacademy.auth.user.controller;
 
 import com.nhnacademy.auth.user.dto.reponse.MemberDto;
 import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
-import com.nhnacademy.auth.user.entity.Member;
 import com.nhnacademy.auth.user.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 회원(Member) RestController 입니다.
  *
@@ -36,7 +42,7 @@ public class MemberController {
      * @return 성공했을 때 응답코드 201 CREATED 반환합니다.
      */
     @PostMapping("/member/create")
-    public ResponseEntity<MemberDto> createMember(@RequestBody MemberCreateRequest memberCreateRequest) {
+    public ResponseEntity<MemberDto> createMember(@Valid @RequestBody MemberCreateRequest memberCreateRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.createMember(memberCreateRequest));
     }
     /**
@@ -46,7 +52,7 @@ public class MemberController {
      * @return 성공했을 때 응답코드 201 CREATED 반환합니다.
      */
     @PutMapping("/member/{memberId}")
-    public ResponseEntity<MemberDto> updateMember(@PathVariable Long memberId,@RequestBody MemberCreateRequest memberCreateRequest) {
+    public ResponseEntity<MemberDto> updateMember(@PathVariable Long memberId,@Valid @RequestBody MemberCreateRequest memberCreateRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.modifyMember(memberId, memberCreateRequest));
     }
     /**
@@ -57,5 +63,18 @@ public class MemberController {
     @DeleteMapping("/member/{memberId}")
     public ResponseEntity<MemberDto> deleteMember(@PathVariable Long memberId) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(memberService.deleteMember(memberId));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex){
+        Map<String, String> errors=new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error)->{
+            String fieldName=((FieldError)error).getField();
+            String errorMessage=error.getDefaultMessage();
+            errors.put(fieldName,errorMessage);
+        });
+        return errors;
     }
 }

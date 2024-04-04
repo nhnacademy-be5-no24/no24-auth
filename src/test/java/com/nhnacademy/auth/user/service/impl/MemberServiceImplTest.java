@@ -1,6 +1,7 @@
 package com.nhnacademy.auth.user.service.impl;
 
-import com.nhnacademy.auth.user.dto.request.MemberCreateDto;
+import com.nhnacademy.auth.user.dto.reponse.MemberDto;
+import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
 import com.nhnacademy.auth.user.entity.Customer;
 import com.nhnacademy.auth.user.entity.Grade;
 import com.nhnacademy.auth.user.entity.Member;
@@ -85,15 +86,23 @@ class MemberServiceImplTest {
                 .grade(grade)
                 .isLeave(false)
                 .isActive(true).build();
+        MemberDto memberDto = MemberDto.builder()
+                .customer(customer)
+                .memberId(memberId)
+                .lastLoginAt(LastLoginAt)
+                .role(role)
+                .grade(grade)
+                .isLeave(false)
+                .isActive(true).build();
 
-        MemberCreateDto memberCreateDto = new MemberCreateDto();
-        memberCreateDto.setCustomerId(customerId);
-        memberCreateDto.setCustomerPassword(customerPassword);
-        memberCreateDto.setCustomerName(customerName);
-        memberCreateDto.setCustomerEmail(customerEmail);
-        memberCreateDto.setCustomerPhoneNumber(customerPhoneNumber);
+        MemberCreateRequest memberCreateRequest = new MemberCreateRequest();
+        memberCreateRequest.setCustomerId(customerId);
+        memberCreateRequest.setCustomerPassword(customerPassword);
+        memberCreateRequest.setCustomerName(customerName);
+        memberCreateRequest.setCustomerEmail(customerEmail);
+        memberCreateRequest.setCustomerPhoneNumber(customerPhoneNumber);
 
-        memberCreateDto.setGradeId(gradeId);
+        memberCreateRequest.setGradeId(gradeId);
 
         //when
         when(customerRepository.save(any())).thenReturn(customer);
@@ -101,8 +110,8 @@ class MemberServiceImplTest {
         when(gradeRepository.findById(1L)).thenReturn(Optional.ofNullable(grade));
 
         //then
-        Member result = memberService.createMember(memberCreateDto);
-        assertThat(member).isEqualTo(result);
+        MemberDto result = memberService.createMember(memberCreateRequest);
+        assertThat(memberDto).isEqualTo(result);
 
     }
 
@@ -135,23 +144,31 @@ class MemberServiceImplTest {
                 .grade(grade)
                 .isLeave(false)
                 .isActive(true).build();
+        MemberDto memberDto = MemberDto.builder()
+                .customer(customer)
+                .memberId(memberId)
+                .lastLoginAt(LastLoginAt)
+                .role(role)
+                .grade(grade)
+                .isLeave(false)
+                .isActive(true).build();
 
-        MemberCreateDto memberCreateDto = new MemberCreateDto();
-        memberCreateDto.setCustomerId(customerId);
-        memberCreateDto.setCustomerPassword(customerPassword);
-        memberCreateDto.setCustomerName(customerName);
-        memberCreateDto.setCustomerEmail(customerEmail);
-        memberCreateDto.setCustomerPhoneNumber(customerPhoneNumber);
+        MemberCreateRequest memberCreateRequest = new MemberCreateRequest();
+        memberCreateRequest.setCustomerId(customerId);
+        memberCreateRequest.setCustomerPassword(customerPassword);
+        memberCreateRequest.setCustomerName(customerName);
+        memberCreateRequest.setCustomerEmail(customerEmail);
+        memberCreateRequest.setCustomerPhoneNumber(customerPhoneNumber);
 
-        memberCreateDto.setGradeId(gradeId);
+        memberCreateRequest.setGradeId(gradeId);
 
         //when
         when(memberRepository.save(any())).thenReturn(member);
         when(gradeRepository.findById(1L)).thenReturn(Optional.ofNullable(grade));
         when(customerRepository.findById(1L)).thenReturn(Optional.ofNullable(customer));
         //then
-        Member result = memberService.modifyMember(1L, memberCreateDto);
-        assertThat(member).isEqualTo(result);
+        MemberDto result = memberService.modifyMember(1L, memberCreateRequest);
+        assertThat(memberDto).isEqualTo(result);
 
     }
 
@@ -186,11 +203,19 @@ class MemberServiceImplTest {
                 .grade(grade)
                 .isLeave(false)
                 .isActive(true).build();
+        MemberDto memberDto = MemberDto.builder()
+                .customer(customer)
+                .memberId(memberId)
+                .lastLoginAt(LastLoginAt)
+                .role(role)
+                .grade(grade)
+                .isLeave(false)
+                .isActive(true).build();
         //when
         when(memberRepository.findById(customerNo)).thenReturn(Optional.ofNullable(member));
         //then
-        Member result = memberService.getMember(customerNo);
-        assertThat(member).isEqualTo(result);
+        MemberDto result = memberService.getMember(customerNo);
+        assertThat(memberDto).isEqualTo(result);
     }
 
     @Test
@@ -234,13 +259,21 @@ class MemberServiceImplTest {
                 .grade(member.getGrade())
                 .isLeave(true)
                 .isActive(member.getIsActive()).build();
+        MemberDto memberDto = MemberDto.builder()
+                .customer(customer)
+                .memberId(memberId)
+                .lastLoginAt(LastLoginAt)
+                .role(role)
+                .grade(grade)
+                .isLeave(true)
+                .isActive(true).build();
 
         when(memberRepository.save(any())).thenReturn(updatedMember);
         when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
 
         //then
-        Member result = memberService.deleteMember(1L);
-        assertThat(updatedMember).isEqualTo(result);
+        MemberDto result = memberService.deleteMember(1L);
+        assertThat(memberDto).isEqualTo(result);
         assertThat(result.getIsLeave()).isTrue();
     }
 }

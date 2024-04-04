@@ -2,7 +2,8 @@ package com.nhnacademy.auth.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.nhnacademy.auth.user.dto.request.MemberCreateDto;
+import com.nhnacademy.auth.user.dto.reponse.MemberDto;
+import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
 import com.nhnacademy.auth.user.entity.Grade;
 import com.nhnacademy.auth.user.entity.Member;
 import com.nhnacademy.auth.user.service.MemberService;
@@ -34,14 +35,14 @@ class MemberControllerTest {
     @MockBean
     private MemberService memberService;
     ObjectMapper objectMapper = new ObjectMapper();
-    MemberCreateDto memberCreateDto;
+    MemberCreateRequest memberCreateRequest;
     Member member;
-    Member modifiedMember;
+    MemberDto memberDto;
 
     @BeforeEach
     void setup() {
         objectMapper.registerModule(new JavaTimeModule());
-        memberCreateDto = MemberCreateDto.builder()
+        memberCreateRequest = MemberCreateRequest.builder()
                 .customerId("회원")
                 .customerPassword("1234")
                 .customerName("김회원")
@@ -60,6 +61,17 @@ class MemberControllerTest {
                 .lastLoginAt(LocalDateTime.now())
                 .isLeave(false)
                 .build();
+        memberDto = MemberDto.builder()
+                .memberId("회원")
+                .isActive(true)
+                .grade(Grade.builder()
+                        .gradeId(1L)
+                        .gradeName("A")
+                        .accumulateRate(100L).build())
+                .lastLoginAt(LocalDateTime.now())
+                .isLeave(false)
+                .build();
+
     }
 
     @Test
@@ -69,7 +81,7 @@ class MemberControllerTest {
         try {
             mockMvc.perform(post("/auth/member/create")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(memberCreateDto)))
+                            .content(objectMapper.writeValueAsString(memberCreateRequest)))
                     .andExpect(status().isCreated());
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -91,11 +103,11 @@ class MemberControllerTest {
     @DisplayName("회원 수정시 완료")
     @Order(3)
     void updateMember_Success() {
-        when(memberService.modifyMember(1L,memberCreateDto)).thenReturn(member);
+        when(memberService.modifyMember(1L, memberCreateRequest)).thenReturn(memberDto);
         try {
             mockMvc.perform(put("/auth/member/1")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(memberCreateDto)))
+                            .content(objectMapper.writeValueAsString(memberCreateRequest)))
                     .andExpect(status().isCreated());
         } catch (Exception e) {
             throw new RuntimeException(e);
