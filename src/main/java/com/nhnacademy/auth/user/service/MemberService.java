@@ -2,6 +2,9 @@ package com.nhnacademy.auth.user.service;
 
 import com.nhnacademy.auth.user.dto.reponse.MemberDto;
 import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
+import org.springframework.data.domain.Page;
+
+
 /**
  * 회원(Member) 서비스 입니다.
  *
@@ -34,4 +37,13 @@ public interface MemberService {
      * @return 회원 정보를 담은 Dto
      */
     MemberDto deleteMember(Long id);
+    /**
+     * 특정 회원에 대한 삭제를 위한 메소드 입니다.
+     * @param gradeId
+     * @return 등급별 회원 dto
+     */
+    Page<MemberDto> getMemberByGradeId(Long gradeId, Integer pageSize, Integer offset);
+
+
+
 }

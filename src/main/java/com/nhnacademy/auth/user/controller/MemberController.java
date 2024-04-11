@@ -4,6 +4,7 @@ import com.nhnacademy.auth.user.dto.reponse.MemberDto;
 import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
 import com.nhnacademy.auth.user.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -64,17 +65,32 @@ public class MemberController {
     public ResponseEntity<MemberDto> deleteMember(@PathVariable Long memberId) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(memberService.deleteMember(memberId));
     }
+    /**
+     * 등급별 회원 조회 시 사용되는 메소드입니다.
+     * @param gradeId 등급을 가져오기 위한 id 입니다.
+     * @param pageSize page별 데이터 갯수 입니다.
+     * @param offset page별 pageNo 입니다.
+     * @return 성공했을 때 응답코드 200 OK 반환합니다.
+     */
+    @GetMapping("/member/grade/{gradeId}")
+    public ResponseEntity<Page<MemberDto>> getMembersByGrade(@PathVariable Long gradeId,
+                                                             @RequestParam Integer pageSize,
+                                                             @RequestParam Integer offset){
+        Page<MemberDto> memberDtos = memberService.getMemberByGradeId(gradeId, pageSize, offset);
+        return ResponseEntity.ok().body(memberDtos);
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex){
-        Map<String, String> errors=new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error)->{
-            String fieldName=((FieldError)error).getField();
-            String errorMessage=error.getDefaultMessage();
-            errors.put(fieldName,errorMessage);
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
         });
         return errors;
     }
+
 }

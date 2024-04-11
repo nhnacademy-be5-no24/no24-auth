@@ -4,22 +4,28 @@ import com.nhnacademy.auth.exception.GradeNotFoundException;
 import com.nhnacademy.auth.exception.MemberNotFoundException;
 import com.nhnacademy.auth.user.dto.reponse.MemberDto;
 import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
-import com.nhnacademy.auth.user.entity.Customer;
-import com.nhnacademy.auth.user.entity.Grade;
-import com.nhnacademy.auth.user.entity.Member;
-import com.nhnacademy.auth.user.entity.Role;
+import com.nhnacademy.auth.user.entity.*;
 import com.nhnacademy.auth.user.repository.CustomerRepository;
 import com.nhnacademy.auth.user.repository.GradeRepository;
 import com.nhnacademy.auth.user.repository.MemberRepository;
 import com.nhnacademy.auth.user.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+/**
+ * 회원(Member) 서비스 구현체입니다.
+ *
+ * @author : 김병주
+ * @date : 2024-04-02
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -50,7 +56,8 @@ public class MemberServiceImpl implements MemberService {
                 .customerPhoneNumber(memberCreateRequest.getCustomerPhoneNumber())
                 .customerEmail(memberCreateRequest.getCustomerEmail())
                 .customerBirthday(memberCreateRequest.getCustomerBirthday())
-                .customerRole(Role.ROLE_MEMBER.toString()).build();
+                .customerRole(Role.ROLE_MEMBER.toString())
+                .build();
 
         customer = customerRepository.save(customer);
 
@@ -62,8 +69,7 @@ public class MemberServiceImpl implements MemberService {
                 .memberId(memberCreateRequest.getCustomerId())
                 .lastLoginAt(LocalDateTime.now())
                 .grade(grade)
-                .isActive(true)
-                .isLeave(false)
+                .memberState(MemberStateName.ACTIVE)
                 .role(Role.ROLE_MEMBER.toString()).build());
         return MemberDto.of(member);
 
@@ -94,8 +100,7 @@ public class MemberServiceImpl implements MemberService {
                 .memberId(memberCreateRequest.getCustomerId())
                 .lastLoginAt(LocalDateTime.now())
                 .grade(optionalGrade)
-                .isActive(true)
-                .isLeave(false)
+                .memberState(MemberStateName.ACTIVE)
                 .role("ROLE_MEMBER").build());
         return MemberDto.of(member);
     }
@@ -111,9 +116,16 @@ public class MemberServiceImpl implements MemberService {
                 .memberId(member.getMemberId())
                 .lastLoginAt(member.getLastLoginAt())
                 .grade(member.getGrade())
-                .isActive(member.getIsActive())
-                .isLeave(true)
+                .memberState(MemberStateName.LEAVE)
                 .role(member.getRole()).build());
         return MemberDto.of(updatedMember);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<MemberDto> getMemberByGradeId(Long gradeId,Integer pageSize,Integer offset) {
+        Pageable pageable = PageRequest.of(pageSize, offset);
+        Grade grade = gradeRepository.findById(gradeId).orElseThrow(()->new GradeNotFoundException(gradeId));
+        return memberRepository.findAllByGrade(grade,pageable);
     }
 }
