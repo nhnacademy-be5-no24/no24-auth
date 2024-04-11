@@ -11,7 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+/**
+ * 고객(Customer) 서비스 입니다.
+ *
+ * @author : 김병주
+ * @date : 2024-04-02
+ */
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {

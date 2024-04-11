@@ -8,7 +8,12 @@ import com.nhnacademy.auth.user.service.GradeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+/**
+ * 등급(Grade) 서비스 구현체 입니다.
+ *
+ * @author : 김병주
+ * @date : 2024-04-02
+ */
 
 @Service
 @RequiredArgsConstructor
