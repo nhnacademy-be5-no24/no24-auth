@@ -6,6 +6,7 @@ import com.nhnacademy.auth.user.dto.reponse.MemberDto;
 import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
 import com.nhnacademy.auth.user.entity.Grade;
 import com.nhnacademy.auth.user.entity.Member;
+import com.nhnacademy.auth.user.entity.MemberStateName;
 import com.nhnacademy.auth.user.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -53,23 +54,22 @@ class MemberControllerTest {
                 .build();
         member = Member.builder()
                 .memberId("회원")
-                .isActive(true)
+
                 .grade(Grade.builder()
                         .gradeId(1L)
                         .gradeName("A")
                         .accumulateRate(100L).build())
                 .lastLoginAt(LocalDateTime.now())
-                .isLeave(false)
+                .memberState(MemberStateName.ACTIVE)
                 .build();
         memberDto = MemberDto.builder()
                 .memberId("회원")
-                .isActive(true)
                 .grade(Grade.builder()
                         .gradeId(1L)
                         .gradeName("A")
                         .accumulateRate(100L).build())
                 .lastLoginAt(LocalDateTime.now())
-                .isLeave(false)
+                .memberState(MemberStateName.ACTIVE)
                 .build();
 
     }

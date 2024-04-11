@@ -1,8 +1,6 @@
 package com.nhnacademy.auth.user.dto.reponse;
 
-import com.nhnacademy.auth.user.entity.Customer;
-import com.nhnacademy.auth.user.entity.Grade;
-import com.nhnacademy.auth.user.entity.Member;
+import com.nhnacademy.auth.user.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +23,7 @@ public class MemberDto {
     private LocalDateTime lastLoginAt;
     private Grade grade;
     private String role;
-    private Boolean isActive;
-    private Boolean isLeave;
+    private MemberStateName memberState;
 
     public static MemberDto of(Member member) {
         return MemberDto.builder()
@@ -35,8 +32,7 @@ public class MemberDto {
                 .lastLoginAt(member.getLastLoginAt())
                 .grade(member.getGrade())
                 .role(member.getRole())
-                .isActive(member.getIsActive())
-                .isLeave(member.getIsLeave()).build();
+                .memberState(member.getMemberState()).build();
     }
 
 }
