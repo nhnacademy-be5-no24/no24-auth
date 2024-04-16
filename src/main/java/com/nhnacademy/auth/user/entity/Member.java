@@ -34,7 +34,7 @@ public class Member {
 //    @Column(name = "is_leave")
 //    private Boolean isLeave;
 
-    @Column(name = "memberState")
+    @Column(name = "member_state")
     private MemberStateName memberState;
 
 }
