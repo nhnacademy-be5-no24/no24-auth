@@ -31,8 +31,7 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
                         member.lastLoginAt,
                         member.grade,
                         member.role,
-                        member.isActive,
-                        member.isLeave
+                        member.memberState
                         ))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
