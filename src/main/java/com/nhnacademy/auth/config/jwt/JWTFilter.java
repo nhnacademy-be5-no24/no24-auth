@@ -41,31 +41,34 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
         String token = authorization.split(" ")[1];
+        System.out.println("token is ... ->" + token);
+        if (token != null) {
 
-        //토큰 소멸 시간 검증
-        if (jwtUtil.isExpired(token)) {
+//        토큰 소멸 시간 검증
+            if (jwtUtil.isExpired(token)) {
 
-            System.out.println("token expired");
-            filterChain.doFilter(request, response);
+                System.out.println("token expired");
+                filterChain.doFilter(request, response);
 
-            //조건이 해당되면 메소드 종료 (필수)
-            return;
+                //조건이 해당되면 메소드 종료 (필수)
+                return;
+            }
+
+
+            String username = jwtUtil.getUsername(token);
+            String role = jwtUtil.getRole(token);
+
+            Customer customer = Customer.builder()
+                    .customerPassword("tempPassword")
+                    .customerRole(role)
+                    .build();
+
+            PrincipalDetails principalDetails = new PrincipalDetails(customer);
+
+            Authentication authToken = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
+
+            SecurityContextHolder.getContext().setAuthentication(authToken);
         }
-
-
-        String username = jwtUtil.getUsername(token);
-        String role = jwtUtil.getRole(token);
-
-        Customer customer = Customer.builder()
-                .customerPassword("tempPassword")
-                .customerRole(role)
-                .build();
-
-        PrincipalDetails principalDetails = new PrincipalDetails(customer);
-
-        Authentication authToken = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
-
-        SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);
     }

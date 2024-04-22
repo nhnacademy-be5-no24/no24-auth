@@ -1,8 +1,11 @@
 package com.nhnacademy.auth.config.jwt;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.auth.config.auth.LoginDto;
 import com.nhnacademy.auth.config.auth.PrincipalDetails;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -12,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -28,14 +32,22 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
+        try {
+            // LoginDto 객체를 HttpServletRequest에서 가져옴
+            LoginDto loginDto = new ObjectMapper().readValue(request.getInputStream(), LoginDto.class);
 
-        System.out.println(username);
+            // LoginDto에서 사용자 이름과 비밀번호를 추출하여 인증을 시도
+            String username = loginDto.getUsername();
+            String password = loginDto.getPassword();
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+            // UsernamePasswordAuthenticationToken 객체 생성
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
 
-        return authenticationManager.authenticate(authToken);
+            // 인증 매니저를 사용하여 사용자를 인증하고 인증 객체 반환
+            return authenticationManager.authenticate(authToken);
+        } catch (IOException e) {
+            throw new AuthenticationServiceException("Failed to parse login credentials", e);
+        }
     }
 
     @Override
@@ -54,6 +66,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String token = jwtUtil.createJwt(username, role, 60*60*1000L);
 
+        System.out.println("token is "+token);
         response.addHeader("Authorization", "Bearer " + token);
     }
 

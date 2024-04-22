@@ -43,6 +43,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        LoginFilter customFiler = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
+        customFiler.setFilterProcessesUrl("/auth/member/login");
+
 
         //csrf disable
         http.csrf((auth) -> auth.disable());
@@ -55,11 +58,11 @@ public class SecurityConfig {
 
         http.authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/**").permitAll()
+                .antMatchers("/auth/member/create").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
-        http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(customFiler, UsernamePasswordAuthenticationFilter.class);
 
         //세션 설정
         http.sessionManagement((session) -> session
