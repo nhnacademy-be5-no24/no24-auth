@@ -32,22 +32,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        try {
-            // LoginDto 객체를 HttpServletRequest에서 가져옴
-            LoginDto loginDto = new ObjectMapper().readValue(request.getInputStream(), LoginDto.class);
+        // LoginDto 객체를 HttpServletRequest에서 가져옴
+        String username = obtainUsername(request);
+        String password = obtainPassword(request);
 
-            // LoginDto에서 사용자 이름과 비밀번호를 추출하여 인증을 시도
-            String username = loginDto.getUsername();
-            String password = loginDto.getPassword();
+        // UsernamePasswordAuthenticationToken 객체 생성
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
 
-            // UsernamePasswordAuthenticationToken 객체 생성
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
-
-            // 인증 매니저를 사용하여 사용자를 인증하고 인증 객체 반환
-            return authenticationManager.authenticate(authToken);
-        } catch (IOException e) {
-            throw new AuthenticationServiceException("Failed to parse login credentials", e);
-        }
+        // 인증 매니저를 사용하여 사용자를 인증하고 인증 객체 반환
+        return authenticationManager.authenticate(authToken);
     }
 
     @Override
@@ -63,11 +56,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-
-        String token = jwtUtil.createJwt(username, role, 60*60*1000L);
+        String token = jwtUtil.createJwt(username, role, JWTUtil.TOKEN_VALIDITY);
+        String refreshToken = jwtUtil.createJwt(username, role, JWTUtil.REFRESH_TOKEN_VALIDITY);
 
         System.out.println("token is "+token);
+        System.out.println("refresh token is "+refreshToken);
         response.addHeader("Authorization", "Bearer " + token);
+        response.addHeader("RefreshToken", "Bearer " + refreshToken);
     }
 
     @Override
