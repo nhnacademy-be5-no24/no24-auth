@@ -2,7 +2,8 @@ package com.nhnacademy.auth.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.nhnacademy.auth.user.dto.request.CustomerCreateDto;
+import com.nhnacademy.auth.user.dto.reponse.CustomerDto;
+import com.nhnacademy.auth.user.dto.request.CustomerCreateRequest;
 import com.nhnacademy.auth.user.entity.Customer;
 import com.nhnacademy.auth.user.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,9 +34,10 @@ class CustomerControllerTest {
     @MockBean
     private CustomerService customerService;
     ObjectMapper objectMapper = new ObjectMapper();
-    CustomerCreateDto customerCreateDto;
+    CustomerCreateRequest customerCreateRequest;
     Customer customer;
     Customer modifiedCustomer;
+    CustomerDto customerDto;
 
     @BeforeEach
     void setup() {
@@ -49,7 +51,7 @@ class CustomerControllerTest {
                 .customerEmail("kim@gmail.com")
                 .customerBirthday(LocalDate.parse("2024-04-01"))
                 .customerRole("ROLE_CUSTOMER").build();
-        customerCreateDto = CustomerCreateDto.builder()
+        customerCreateRequest = CustomerCreateRequest.builder()
                 .customerId("고객2")
                 .customerPassword("1234")
                 .customerName("임고객")
@@ -65,6 +67,13 @@ class CustomerControllerTest {
                 .customerEmail("kim@gmail.com")
                 .customerBirthday(LocalDate.parse("2024-04-01"))
                 .customerRole("ROLE_CUSTOMER").build();
+        customerDto = CustomerDto.builder()
+                .customerId("고객1")
+                .customerPassword("1234")
+                .customerName("임고객")
+                .customerPhoneNumber("01012345678")
+                .customerEmail("kim@gmail.com")
+                .customerBirthday(LocalDate.parse("2024-04-01")).build();
     }
 
     @Test
@@ -74,7 +83,7 @@ class CustomerControllerTest {
         try {
             mockMvc.perform(post("/auth/customer/create")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(customerCreateDto)))
+                            .content(objectMapper.writeValueAsString(customerCreateRequest)))
                     .andExpect(status().isCreated());
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -84,7 +93,7 @@ class CustomerControllerTest {
     @DisplayName("고객 단건 조회 완료")
     @Order(2)
     void getCustomer_Success() {
-        when(customerService.getCustomer(anyLong())).thenReturn(customer);
+        when(customerService.getCustomer(anyLong())).thenReturn(customerDto);
         try {
             mockMvc.perform(get("/auth/customer/1")
                             .contentType(MediaType.APPLICATION_JSON))
@@ -97,11 +106,11 @@ class CustomerControllerTest {
     @DisplayName("고객 수정 완료")
     @Order(3)
     void updateCustomer_Success() {
-        when(customerService.modifyCustomer(1L,customerCreateDto)).thenReturn(modifiedCustomer);
+        when(customerService.modifyCustomer(1L, customerCreateRequest)).thenReturn(customerDto);
         try {
             mockMvc.perform(put("/auth/customer/update/1")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(customerCreateDto)))
+                            .content(objectMapper.writeValueAsString(customerCreateRequest)))
                     .andExpect(status().isCreated());
         } catch (Exception e) {
             throw new RuntimeException(e);

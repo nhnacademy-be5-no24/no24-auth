@@ -29,8 +29,12 @@ public class Member {
     @Column(name = "role")
     private String role;
 
-    @Column(name = "is_active")
-    private Boolean isActive;
-    @Column(name = "is_leave")
-    private Boolean isLeave;
+//    @Column(name = "is_active")
+//    private Boolean isActive;
+//    @Column(name = "is_leave")
+//    private Boolean isLeave;
+
+    @Column(name = "member_state")
+    private MemberStateName memberState;
+
 }

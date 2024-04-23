@@ -1,6 +1,6 @@
 package com.nhnacademy.auth.user.service.impl;
 
-import com.nhnacademy.auth.user.dto.request.GradeCreateDto;
+import com.nhnacademy.auth.user.dto.reponse.GradeDto;
 import com.nhnacademy.auth.user.entity.Grade;
 import com.nhnacademy.auth.user.repository.GradeRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -38,16 +38,16 @@ class GradeServiceImplTest {
                 .gradeName(gradeName)
                 .accumulateRate(accumulateRate).build();
 
-        GradeCreateDto gradeCreateDto = new GradeCreateDto();
-        gradeCreateDto.setGradeName(gradeName);
-        gradeCreateDto.setAccumulateRate(accumulateRate);
+        GradeDto gradeDto = new GradeDto();
+        gradeDto.setGradeName(gradeName);
+        gradeDto.setAccumulateRate(accumulateRate);
 
         //when
         when(gradeRepository.save(any())).thenReturn(grade);
 
         //then
-        Grade result = gradeService.createGrade(gradeCreateDto);
-        assertThat(result).isEqualTo(grade);
+        GradeDto result = gradeService.createGrade(gradeDto);
+        assertThat(result).isEqualTo(gradeDto);
     }
 
     @Test
@@ -58,12 +58,15 @@ class GradeServiceImplTest {
                 .gradeId(1L)
                 .gradeName(gradeName)
                 .accumulateRate(accumulateRate).build();
+        GradeDto gradeDto = new GradeDto();
+        gradeDto.setGradeName(gradeName);
+        gradeDto.setAccumulateRate(accumulateRate);
         //when
         when(gradeRepository.findById(anyLong())).thenReturn(Optional.ofNullable(grade));
 
         //then
-        Grade result = gradeService.getGrade(1L);
-        assertThat(result).isEqualTo(grade);
+        GradeDto result = gradeService.getGrade(1L);
+        assertThat(result).isEqualTo(gradeDto);
     }
 
     @Test
@@ -75,12 +78,12 @@ class GradeServiceImplTest {
                 .gradeName(gradeName)
                 .accumulateRate(accumulateRate).build();
 
-        GradeCreateDto gradeCreateDto = new GradeCreateDto();
-        gradeCreateDto.setGradeName(gradeName);
-        gradeCreateDto.setAccumulateRate(accumulateRate);
-
         Grade modifiedGrade = new Grade().builder()
                 .gradeId(1L)
+                .gradeName("B")
+                .accumulateRate(200000L)
+                .build();
+        GradeDto gradeDto = GradeDto.builder()
                 .gradeName("B")
                 .accumulateRate(200000L)
                 .build();
@@ -90,8 +93,8 @@ class GradeServiceImplTest {
         when(gradeRepository.save(any())).thenReturn(modifiedGrade);
 
         //then
-        Grade result = gradeService.modifyGrade(1L, gradeCreateDto);
-        assertThat(result).isEqualTo(modifiedGrade);
+        GradeDto result = gradeService.modifyGrade(1L, gradeDto);
+        assertThat(result).isEqualTo(gradeDto);
     }
 
     @Test
@@ -102,14 +105,17 @@ class GradeServiceImplTest {
                 .gradeId(1L)
                 .gradeName(gradeName)
                 .accumulateRate(accumulateRate).build();
+        GradeDto gradeDto = new GradeDto();
+        gradeDto.setGradeName(gradeName);
+        gradeDto.setAccumulateRate(accumulateRate);
 
         //when
         when(gradeRepository.deleteByGradeId(1L)).thenReturn(grade);
         when(gradeRepository.findById(1L)).thenReturn(Optional.ofNullable(grade));
 
         //then
-        Grade result = gradeService.deleteGrade(1L);
-        assertThat(result).isEqualTo(grade);
+        GradeDto result = gradeService.deleteGrade(1L);
+        assertThat(result).isEqualTo(gradeDto);
 
     }
 
