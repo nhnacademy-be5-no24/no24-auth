@@ -19,7 +19,7 @@ public class CustomerDto {
     private String customerPhoneNumber;
     private String customerEmail;
     private LocalDate customerBirthday;
-    private String  customerRole;
+    private String customerRole;
 
     public static CustomerDto of(Customer customer) {
         return CustomerDto.builder()

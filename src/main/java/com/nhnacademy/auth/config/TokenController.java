@@ -2,6 +2,7 @@ package com.nhnacademy.auth.config;
 
 import com.nhnacademy.auth.config.auth.TokenDto;
 import com.nhnacademy.auth.config.jwt.JWTUtil;
+import com.nhnacademy.auth.user.dto.reponse.CustomerDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,18 @@ public class TokenController {
 
     public TokenController(JWTUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
+    }
+
+    @PostMapping("/get/customerNo")
+    public ResponseEntity<Long> getCustomerNo(@RequestHeader("Authorization") String token) {
+        try {
+            Long customerNo = jwtUtil.getCustomerNo(token.split(" ")[1]);
+
+            return ResponseEntity.ok(customerNo);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
     }
 
     @PostMapping("/verify")
@@ -57,9 +70,10 @@ public class TokenController {
             // refresh 토큰은 만료된 것이 아니라면 새로운 토큰 발급
             String username = jwtUtil.getUsername(refreshToken);
             String role = jwtUtil.getRole(refreshToken);
+            Long customerNo = jwtUtil.getCustomerNo(refreshToken);
 
-            String newToken = "Bearer " + jwtUtil.createJwt(username, role, TOKEN_VALIDITY);
-            String newRefreshToken = "Bearer " + jwtUtil.createJwt(username, role, REFRESH_TOKEN_VALIDITY);
+            String newToken = "Bearer " + jwtUtil.createJwt(username, role, customerNo, TOKEN_VALIDITY);
+            String newRefreshToken = "Bearer " + jwtUtil.createJwt(username, role, customerNo, REFRESH_TOKEN_VALIDITY);
 
             tokenResponse = new TokenDto(newToken, newRefreshToken);
 
