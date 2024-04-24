@@ -61,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
 
         customer = customerRepository.save(customer);
 
-        Grade grade = gradeRepository.findById(memberCreateRequest.getGradeId()).orElseThrow(() -> new GradeNotFoundException(memberCreateRequest.getGradeId()));
+        Grade grade = gradeRepository.findById(1L).get();
 
         Member member = memberRepository.save(Member.builder()
                 .customerNo(customer.getCustomerNo())
@@ -71,6 +71,7 @@ public class MemberServiceImpl implements MemberService {
                 .grade(grade)
                 .memberState(MemberStateName.ACTIVE)
                 .role(Role.ROLE_MEMBER.toString()).build());
+
         return MemberDto.of(member);
 
     }
