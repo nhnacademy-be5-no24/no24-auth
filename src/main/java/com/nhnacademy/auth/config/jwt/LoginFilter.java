@@ -49,6 +49,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         PrincipalDetails customUserDetails = (PrincipalDetails) authentication.getPrincipal();
 
         String username = customUserDetails.getUsername();
+        Long customerNo = customUserDetails.getCustomerNo();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -56,8 +57,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(username, role, JWTUtil.TOKEN_VALIDITY);
-        String refreshToken = jwtUtil.createJwt(username, role, JWTUtil.REFRESH_TOKEN_VALIDITY);
+        String token = jwtUtil.createJwt(username, role, customerNo, JWTUtil.TOKEN_VALIDITY);
+        String refreshToken = jwtUtil.createJwt(username, role, customerNo, JWTUtil.REFRESH_TOKEN_VALIDITY);
 
         System.out.println("token is "+token);
         System.out.println("refresh token is "+refreshToken);
