@@ -6,7 +6,7 @@ import com.nhnacademy.auth.user.dto.reponse.MemberDto;
 import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
 import com.nhnacademy.auth.user.entity.Grade;
 import com.nhnacademy.auth.user.entity.Member;
-import com.nhnacademy.auth.user.entity.MemberStateName;
+import com.nhnacademy.auth.user.entity.MemberState;
 import com.nhnacademy.auth.user.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -60,7 +60,7 @@ class MemberControllerTest {
                         .gradeName("A")
                         .accumulateRate(100L).build())
                 .lastLoginAt(LocalDateTime.now())
-                .memberState(MemberStateName.ACTIVE)
+                .memberState(MemberState.ACTIVE)
                 .build();
         memberDto = MemberDto.builder()
                 .memberId("회원")
@@ -69,7 +69,7 @@ class MemberControllerTest {
                         .gradeName("A")
                         .accumulateRate(100L).build())
                 .lastLoginAt(LocalDateTime.now())
-                .memberState(MemberStateName.ACTIVE)
+                .memberState(MemberState.ACTIVE)
                 .build();
 
     }
