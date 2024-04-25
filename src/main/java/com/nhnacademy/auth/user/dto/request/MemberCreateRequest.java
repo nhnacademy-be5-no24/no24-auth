@@ -1,6 +1,7 @@
 package com.nhnacademy.auth.user.dto.request;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -20,7 +21,9 @@ public class MemberCreateRequest {
     private String customerPhoneNumber;
     @Email
     private String customerEmail;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate customerBirthday;
-
-    private Long gradeId;
+    private String customerPostcode;
+    private String customerAddress;
+    private String customerDetailAddress;
 }

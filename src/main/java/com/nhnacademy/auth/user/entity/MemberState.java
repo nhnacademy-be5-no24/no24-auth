@@ -1,5 +1,5 @@
 package com.nhnacademy.auth.user.entity;
 
-public enum MemberStateName {
+public enum MemberState {
     ACTIVE,INACTIVE,LEAVE,BAN
 }

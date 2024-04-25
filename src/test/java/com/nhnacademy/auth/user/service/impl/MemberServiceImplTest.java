@@ -88,7 +88,7 @@ class MemberServiceImplTest {
                 .lastLoginAt(LastLoginAt)
                 .role(role)
                 .grade(grade)
-                .memberState(MemberStateName.ACTIVE)
+                .memberState(MemberState.ACTIVE)
                 .build();
         MemberDto memberDto = MemberDto.builder()
                 .customer(customer)
@@ -96,7 +96,7 @@ class MemberServiceImplTest {
                 .lastLoginAt(LastLoginAt)
                 .role(role)
                 .grade(grade)
-                .memberState(MemberStateName.ACTIVE).build();
+                .memberState(MemberState.ACTIVE).build();
 
         MemberCreateRequest memberCreateRequest = new MemberCreateRequest();
         memberCreateRequest.setCustomerId(customerId);
@@ -145,7 +145,7 @@ class MemberServiceImplTest {
                 .lastLoginAt(LastLoginAt)
                 .role(role)
                 .grade(grade)
-                .memberState(MemberStateName.ACTIVE)
+                .memberState(MemberState.ACTIVE)
                 .build();
         MemberDto memberDto = MemberDto.builder()
                 .customer(customer)
@@ -153,7 +153,7 @@ class MemberServiceImplTest {
                 .lastLoginAt(LastLoginAt)
                 .role(role)
                 .grade(grade)
-                .memberState(MemberStateName.ACTIVE).build();
+                .memberState(MemberState.ACTIVE).build();
 
         MemberCreateRequest memberCreateRequest = new MemberCreateRequest();
         memberCreateRequest.setCustomerId(customerId);
@@ -203,14 +203,14 @@ class MemberServiceImplTest {
                 .lastLoginAt(LastLoginAt)
                 .role(role)
                 .grade(grade)
-                .memberState(MemberStateName.ACTIVE).build();
+                .memberState(MemberState.ACTIVE).build();
         MemberDto memberDto = MemberDto.builder()
                 .customer(customer)
                 .memberId(memberId)
                 .lastLoginAt(LastLoginAt)
                 .role(role)
                 .grade(grade)
-                .memberState(MemberStateName.ACTIVE)
+                .memberState(MemberState.ACTIVE)
                 .build();
         //when
         when(memberRepository.findById(customerNo)).thenReturn(Optional.ofNullable(member));
@@ -247,7 +247,7 @@ class MemberServiceImplTest {
                 .lastLoginAt(LastLoginAt)
                 .role(role)
                 .grade(grade)
-                .memberState(MemberStateName.ACTIVE).build();
+                .memberState(MemberState.ACTIVE).build();
 
         //when
         Member updatedMember = new Member().builder()
@@ -257,14 +257,14 @@ class MemberServiceImplTest {
                 .lastLoginAt(member.getLastLoginAt())
                 .role(member.getRole())
                 .grade(member.getGrade())
-                .memberState(MemberStateName.LEAVE).build();
+                .memberState(MemberState.LEAVE).build();
         MemberDto memberDto = MemberDto.builder()
                 .customer(customer)
                 .memberId(memberId)
                 .lastLoginAt(LastLoginAt)
                 .role(role)
                 .grade(grade)
-                .memberState(MemberStateName.LEAVE).build();
+                .memberState(MemberState.LEAVE).build();
 
         when(memberRepository.save(any())).thenReturn(updatedMember);
         when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
@@ -272,7 +272,7 @@ class MemberServiceImplTest {
         //then
         MemberDto result = memberService.deleteMember(1L);
         assertThat(memberDto).isEqualTo(result);
-        assertThat(result.getMemberState()).isEqualTo(MemberStateName.LEAVE);
+        assertThat(result.getMemberState()).isEqualTo(MemberState.LEAVE);
     }
     @Test
     @DisplayName("memeber 등급별로 조회")
@@ -302,21 +302,21 @@ class MemberServiceImplTest {
                 .lastLoginAt(LastLoginAt)
                 .role(role)
                 .grade(grade)
-                .memberState(MemberStateName.ACTIVE).build();
+                .memberState(MemberState.ACTIVE).build();
         MemberDto member2 = new MemberDto().builder()
                 .customer(customer)
                 .memberId(memberId)
                 .lastLoginAt(LastLoginAt)
                 .role(role)
                 .grade(grade)
-                .memberState(MemberStateName.ACTIVE).build();
+                .memberState(MemberState.ACTIVE).build();
         MemberDto member3 = new MemberDto().builder()
                 .customer(customer)
                 .memberId(memberId)
                 .lastLoginAt(LastLoginAt)
                 .role(role)
                 .grade(grade)
-                .memberState(MemberStateName.ACTIVE).build();
+                .memberState(MemberState.ACTIVE).build();
 
         List<MemberDto> memberDtos = new ArrayList<>();
         memberDtos.add(member1);
@@ -331,7 +331,7 @@ class MemberServiceImplTest {
                 .lastLoginAt(LastLoginAt)
                 .role(role)
                 .grade(grade)
-                .memberState(MemberStateName.ACTIVE).build();
+                .memberState(MemberState.ACTIVE).build();
         //when
         when(gradeRepository.findById(any())).thenReturn(Optional.ofNullable(grade));
         int offset = 1; // 요청한 페이지 번호

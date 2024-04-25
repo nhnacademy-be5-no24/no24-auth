@@ -1,5 +1,7 @@
 package com.nhnacademy.auth.user.service.impl;
 
+import com.nhnacademy.auth.address.domain.Address;
+import com.nhnacademy.auth.address.repository.AddressRepository;
 import com.nhnacademy.auth.exception.GradeNotFoundException;
 import com.nhnacademy.auth.exception.MemberNotFoundException;
 import com.nhnacademy.auth.user.dto.reponse.MemberDto;
@@ -34,6 +36,7 @@ public class MemberServiceImpl implements MemberService {
     private final CustomerRepository customerRepository;
     private final MemberRepository memberRepository;
     private final GradeRepository gradeRepository;
+    private final AddressRepository addressRepository;
 
 
     @Override
@@ -69,8 +72,20 @@ public class MemberServiceImpl implements MemberService {
                 .memberId(memberCreateRequest.getCustomerId())
                 .lastLoginAt(LocalDateTime.now())
                 .grade(grade)
-                .memberState(MemberStateName.ACTIVE)
+                .memberState(MemberState.ACTIVE)
                 .role(Role.ROLE_MEMBER.toString()).build());
+
+        addressRepository.save(Address.builder()
+                .addressId(null)
+                .alias("기본 주소")
+                .receiverName(memberCreateRequest.getCustomerName())
+                .receiverPhoneNumber(memberCreateRequest.getCustomerPhoneNumber())
+                .zipcode(memberCreateRequest.getCustomerPostcode())
+                .address(memberCreateRequest.getCustomerAddress())
+                .addressDetail(memberCreateRequest.getCustomerDetailAddress())
+                .isDefault(true)
+                .member(member)
+                .build());
 
         return MemberDto.of(member);
 
@@ -93,7 +108,7 @@ public class MemberServiceImpl implements MemberService {
                 .customerEmail(memberCreateRequest.getCustomerEmail())
                 .customerBirthday(memberCreateRequest.getCustomerBirthday())
                 .customerRole("ROLE_MEMBER").build();
-        Grade optionalGrade = gradeRepository.findById(memberCreateRequest.getGradeId()).orElseThrow(() -> new RuntimeException("해당 등급을 찾을 수 없습니다. " + memberCreateRequest.getGradeId()));
+        Grade optionalGrade = gradeRepository.findById(1L).orElseThrow(() -> new RuntimeException("해당 등급을 찾을 수 없습니다. " + 1L));
 
         Member member = memberRepository.save(Member.builder()
                 .customerNo(customer.getCustomerNo())
@@ -101,7 +116,7 @@ public class MemberServiceImpl implements MemberService {
                 .memberId(memberCreateRequest.getCustomerId())
                 .lastLoginAt(LocalDateTime.now())
                 .grade(optionalGrade)
-                .memberState(MemberStateName.ACTIVE)
+                .memberState(MemberState.ACTIVE)
                 .role("ROLE_MEMBER").build());
         return MemberDto.of(member);
     }
@@ -117,7 +132,7 @@ public class MemberServiceImpl implements MemberService {
                 .memberId(member.getMemberId())
                 .lastLoginAt(member.getLastLoginAt())
                 .grade(member.getGrade())
-                .memberState(MemberStateName.LEAVE)
+                .memberState(MemberState.LEAVE)
                 .role(member.getRole()).build());
         return MemberDto.of(updatedMember);
     }
