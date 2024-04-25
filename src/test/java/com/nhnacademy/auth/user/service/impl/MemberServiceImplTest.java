@@ -105,8 +105,6 @@ class MemberServiceImplTest {
         memberCreateRequest.setCustomerEmail(customerEmail);
         memberCreateRequest.setCustomerPhoneNumber(customerPhoneNumber);
 
-        memberCreateRequest.setGradeId(gradeId);
-
         //when
         when(customerRepository.save(any())).thenReturn(customer);
         when(memberRepository.save(any())).thenReturn(member);
@@ -161,8 +159,6 @@ class MemberServiceImplTest {
         memberCreateRequest.setCustomerName(customerName);
         memberCreateRequest.setCustomerEmail(customerEmail);
         memberCreateRequest.setCustomerPhoneNumber(customerPhoneNumber);
-
-        memberCreateRequest.setGradeId(gradeId);
 
         //when
         when(memberRepository.save(any())).thenReturn(member);

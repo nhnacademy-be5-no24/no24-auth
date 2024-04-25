@@ -50,7 +50,6 @@ class MemberControllerTest {
                 .customerBirthday(LocalDate.parse("2024-04-02"))
                 .customerEmail("kim@gmail.com")
                 .customerPhoneNumber("01012345678")
-                .gradeId(1L)
                 .build();
         member = Member.builder()
                 .memberId("회원")
