@@ -24,7 +24,7 @@ public class JWTUtil {
     }
 
     private SecretKey secretKey;
-    public static long TOKEN_VALIDITY = 60*1000L;
+    public static long TOKEN_VALIDITY = 60*60*1000L;
     public static long REFRESH_TOKEN_VALIDITY = 3*60*60*1000L;
 
     public JWTUtil(@Value("${spring.jwt.secret}") String secret) {
