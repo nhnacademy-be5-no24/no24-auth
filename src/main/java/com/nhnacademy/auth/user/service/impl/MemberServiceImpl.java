@@ -3,6 +3,7 @@ package com.nhnacademy.auth.user.service.impl;
 import com.nhnacademy.auth.exception.GradeNotFoundException;
 import com.nhnacademy.auth.exception.MemberNotFoundException;
 import com.nhnacademy.auth.user.dto.reponse.MemberDto;
+import com.nhnacademy.auth.user.dto.reponse.MemberInfoResponseDto;
 import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
 import com.nhnacademy.auth.user.entity.*;
 import com.nhnacademy.auth.user.repository.CustomerRepository;
@@ -127,5 +128,11 @@ public class MemberServiceImpl implements MemberService {
         Pageable pageable = PageRequest.of(pageSize, offset);
         Grade grade = gradeRepository.findById(gradeId).orElseThrow(()->new GradeNotFoundException(gradeId));
         return memberRepository.findAllByGrade(grade,pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public MemberInfoResponseDto getMemberByMemberId(String memberId) {
+        return memberRepository.findMemberByMemberId(memberId);
     }
 }

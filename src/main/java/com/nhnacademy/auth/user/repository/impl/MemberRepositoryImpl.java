@@ -1,6 +1,7 @@
 package com.nhnacademy.auth.user.repository.impl;
 
 import com.nhnacademy.auth.user.dto.reponse.MemberDto;
+import com.nhnacademy.auth.user.dto.reponse.MemberInfoResponseDto;
 import com.nhnacademy.auth.user.entity.Grade;
 import com.nhnacademy.auth.user.entity.Member;
 import com.nhnacademy.auth.user.entity.QMember;
@@ -37,5 +38,16 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
                 .limit(pageable.getPageSize())
                 .fetch();
         return PageableExecutionUtils.getPage(content,pageable,count::fetchCount);
+    }
+
+    @Override
+    public MemberInfoResponseDto findMemberByMemberId(String memberId) {
+        return from(member)
+                .select(Projections.constructor(MemberInfoResponseDto.class,
+                        member.memberId,
+                        member.lastLoginAt,
+                        member.role))
+                .where(member.memberId.eq(memberId))
+                .fetchOne();
     }
 }

@@ -1,6 +1,7 @@
 package com.nhnacademy.auth.user.service;
 
 import com.nhnacademy.auth.user.dto.reponse.MemberDto;
+import com.nhnacademy.auth.user.dto.reponse.MemberInfoResponseDto;
 import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
 import org.springframework.data.domain.Page;
 
@@ -44,6 +45,11 @@ public interface MemberService {
      */
     Page<MemberDto> getMemberByGradeId(Long gradeId, Integer pageSize, Integer offset);
 
-
+    /**
+     * 특정 회원에 대한 기본 정보 조회를 위한 메소드 입니다.
+     * @param memberId 회원 고유 번호
+     * @return 회원 정보를 담은 Dto
+     */
+    MemberInfoResponseDto getMemberByMemberId(String memberId);
 
 }
