@@ -76,6 +76,7 @@ public class MemberServiceImpl implements MemberService {
                 .memberState(MemberState.ACTIVE)
                 .role(Role.ROLE_MEMBER.toString()).build());
 
+        System.out.println(memberCreateRequest.getCustomerAddress());
         if(memberCreateRequest.getCustomerAddress() == null) {
             addressRepository.save(Address.builder()
                     .addressId(null)
