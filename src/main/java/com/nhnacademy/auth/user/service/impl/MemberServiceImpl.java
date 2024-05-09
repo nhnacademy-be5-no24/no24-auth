@@ -76,17 +76,19 @@ public class MemberServiceImpl implements MemberService {
                 .memberState(MemberState.ACTIVE)
                 .role(Role.ROLE_MEMBER.toString()).build());
 
-        addressRepository.save(Address.builder()
-                .addressId(null)
-                .alias("기본 주소")
-                .receiverName(memberCreateRequest.getCustomerName())
-                .receiverPhoneNumber(memberCreateRequest.getCustomerPhoneNumber())
-                .zipcode(memberCreateRequest.getCustomerPostcode())
-                .address(memberCreateRequest.getCustomerAddress())
-                .addressDetail(memberCreateRequest.getCustomerDetailAddress())
-                .isDefault(true)
-                .member(member)
-                .build());
+        if(memberCreateRequest.getCustomerAddress() == null) {
+            addressRepository.save(Address.builder()
+                    .addressId(null)
+                    .alias("기본 주소")
+                    .receiverName(memberCreateRequest.getCustomerName())
+                    .receiverPhoneNumber(memberCreateRequest.getCustomerPhoneNumber())
+                    .zipcode(memberCreateRequest.getCustomerPostcode())
+                    .address(memberCreateRequest.getCustomerAddress())
+                    .addressDetail(memberCreateRequest.getCustomerDetailAddress())
+                    .isDefault(true)
+                    .member(member)
+                    .build());
+        }
 
         return MemberDto.of(member);
 
