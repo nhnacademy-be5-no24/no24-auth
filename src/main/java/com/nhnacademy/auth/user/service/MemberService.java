@@ -52,4 +52,5 @@ public interface MemberService {
      */
     MemberInfoResponseDto getMemberByMemberId(String memberId);
 
+    boolean existMemberByMemberId(String memberId);
 }

@@ -98,6 +98,11 @@ public class MemberController {
         return ResponseEntity.ok().body(memberDtos);
     }
 
+    @GetMapping("/member/exist/{memberId}")
+    public ResponseEntity<Boolean> existMember(@PathVariable String memberId) {
+        return ResponseEntity.ok().body(memberService.existMemberByMemberId(memberId));
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(

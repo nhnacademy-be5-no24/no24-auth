@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member,Long> ,MemberRepositoryCustom {
     Page<MemberDto> findAllByGrade(Grade grade, Pageable pageable);
+    boolean existsByMemberId(String memberId);
 }

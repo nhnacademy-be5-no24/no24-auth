@@ -151,4 +151,9 @@ public class MemberServiceImpl implements MemberService {
     public MemberInfoResponseDto getMemberByMemberId(String memberId) {
         return memberRepository.findMemberByMemberId(memberId);
     }
+
+    @Override
+    public boolean existMemberByMemberId(String memberId) {
+        return memberRepository.existsByMemberId(memberId);
+    }
 }
