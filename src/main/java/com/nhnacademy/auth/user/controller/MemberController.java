@@ -1,9 +1,12 @@
 package com.nhnacademy.auth.user.controller;
 
+import com.nhnacademy.auth.config.jwt.JWTUtil;
 import com.nhnacademy.auth.user.dto.reponse.MemberDto;
+import com.nhnacademy.auth.user.dto.reponse.MemberInfoResponseDto;
 import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
 import com.nhnacademy.auth.user.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +29,9 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class MemberController {
     private final MemberService memberService;
+
+    @Autowired
+    private final JWTUtil jwtUtil;
     /**
      * 회원 단건 조회 요청 시 사용되는 메소드입니다.
      *
@@ -35,6 +41,18 @@ public class MemberController {
     @GetMapping("/member/{memberId}")
     public ResponseEntity<MemberDto> getMember(@PathVariable Long memberId) {
         return ResponseEntity.ok().body(memberService.getMember(memberId));
+    }
+
+    /**
+     * 회원 단건 조회 요청 시 사용되는 메소드입니다.
+     *
+     * @param token 조회를 위한 해당 회원 Access Token 입니다.
+     * @return 성공했을 때 응답코드 200 OK 반환합니다.
+     */
+    @GetMapping("/member/token/{token}")
+    public ResponseEntity<MemberInfoResponseDto> getMemberByToken(@PathVariable String token) {
+        String memberId = jwtUtil.getUsername(token);
+        return ResponseEntity.ok().body(memberService.getMemberByMemberId(memberId));
     }
     /**
      * 회원 생성 조회 요청 시 사용되는 메소드입니다.
