@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -25,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureMockMvc
 class GradeControllerTest {
-    @Autowired
     private MockMvc mockMvc;
     @MockBean
     private GradeService gradeService;
@@ -36,6 +36,7 @@ class GradeControllerTest {
 
     @BeforeEach
     void setup() {
+        mockMvc = MockMvcBuilders.standaloneSetup(new GradeController(gradeService)).build();
         grade = Grade.builder()
                 .gradeId(1L)
                 .gradeName("A")
