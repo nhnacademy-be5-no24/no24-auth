@@ -2,6 +2,7 @@ package com.nhnacademy.auth.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.nhnacademy.auth.config.jwt.JWTUtil;
 import com.nhnacademy.auth.user.dto.reponse.MemberDto;
 import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
 import com.nhnacademy.auth.user.entity.Grade;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,10 +33,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureMockMvc
 class MemberControllerTest {
-    @Autowired
     private MockMvc mockMvc;
     @MockBean
     private MemberService memberService;
+    @MockBean
+    private JWTUtil jwtUtil;
     ObjectMapper objectMapper = new ObjectMapper();
     MemberCreateRequest memberCreateRequest;
     Member member;
@@ -42,6 +45,7 @@ class MemberControllerTest {
 
     @BeforeEach
     void setup() {
+        mockMvc = MockMvcBuilders.standaloneSetup(new MemberController(memberService, jwtUtil)).build();
         objectMapper.registerModule(new JavaTimeModule());
         memberCreateRequest = MemberCreateRequest.builder()
                 .customerId("회원")
