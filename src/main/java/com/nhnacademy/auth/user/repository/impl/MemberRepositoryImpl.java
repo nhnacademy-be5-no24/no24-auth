@@ -45,6 +45,9 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
         return from(member)
                 .select(Projections.constructor(MemberInfoResponseDto.class,
                         member.memberId,
+                        member.customer.customerName,
+                        member.customer.customerEmail,
+                        member.customer.customerPhoneNumber,
                         member.lastLoginAt,
                         member.role))
                 .where(member.memberId.eq(memberId))

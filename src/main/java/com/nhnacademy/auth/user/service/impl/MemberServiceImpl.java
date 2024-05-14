@@ -7,6 +7,7 @@ import com.nhnacademy.auth.exception.MemberNotFoundException;
 import com.nhnacademy.auth.user.dto.reponse.MemberDto;
 import com.nhnacademy.auth.user.dto.reponse.MemberInfoResponseDto;
 import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
+import com.nhnacademy.auth.user.dto.request.MemberVerifyRequest;
 import com.nhnacademy.auth.user.entity.*;
 import com.nhnacademy.auth.user.repository.CustomerRepository;
 import com.nhnacademy.auth.user.repository.GradeRepository;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * 회원(Member) 서비스 구현체입니다.
@@ -150,6 +152,23 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true)
+    public MemberInfoResponseDto getMemberInfoByCustomerNo(Long customerNo) {
+        Optional<Member> optionalMember = memberRepository.findById(customerNo);
+
+        if(optionalMember.isEmpty()) {
+            throw new MemberNotFoundException(customerNo);
+        }
+
+        return MemberInfoResponseDto.builder()
+                .memberId(optionalMember.get().getMemberId())
+                .memberName(optionalMember.get().getCustomer().getCustomerName())
+                .email(optionalMember.get().getCustomer().getCustomerEmail())
+                .phoneNumber(optionalMember.get().getCustomer().getCustomerPhoneNumber())
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public MemberInfoResponseDto getMemberByMemberId(String memberId) {
         return memberRepository.findMemberByMemberId(memberId);
     }
@@ -157,5 +176,38 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean existMemberByMemberId(String memberId) {
         return memberRepository.existsByMemberId(memberId);
+    }
+
+    @Override
+    public boolean verifyMember(MemberVerifyRequest memberVerifyRequest) {
+        Long customerNo = memberVerifyRequest.getCustomerNo();
+        Optional<Member> optionalMember = memberRepository.findById(customerNo);
+
+        if(optionalMember.isEmpty()) {
+            throw new MemberNotFoundException(customerNo);
+        }
+
+        if(bCryptPasswordEncoder.matches(memberVerifyRequest.getCustomerPassword(),
+                optionalMember.get().getCustomer().getCustomerPassword())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    @Transactional
+    public void changeToActive(String customerId) {
+        Customer customer = customerRepository.findByCustomerId(customerId);
+        Optional<Member> optionalMember = memberRepository.findById(customer.getCustomerNo());
+
+        if(optionalMember.isEmpty()) {
+            throw new MemberNotFoundException(customer.getCustomerNo());
+        }
+
+        Member member = optionalMember.get();
+        member = member.setState(MemberState.ACTIVE);
+
+        memberRepository.save(member);
     }
 }

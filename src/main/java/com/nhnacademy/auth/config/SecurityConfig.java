@@ -3,6 +3,7 @@ package com.nhnacademy.auth.config;
 import com.nhnacademy.auth.config.jwt.JWTFilter;
 import com.nhnacademy.auth.config.jwt.JWTUtil;
 import com.nhnacademy.auth.config.jwt.LoginFilter;
+import com.nhnacademy.auth.user.repository.MemberRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,7 +43,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, MemberRepository memberRepository) throws Exception {
         //csrf disable
         http.csrf((auth) -> auth.disable());
 
@@ -58,7 +59,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated();
 
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
-        http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, memberRepository), UsernamePasswordAuthenticationFilter.class);
 
         //세션 설정
         http.sessionManagement((session) -> session

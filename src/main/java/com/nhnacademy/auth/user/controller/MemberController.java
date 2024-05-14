@@ -4,6 +4,7 @@ import com.nhnacademy.auth.config.jwt.JWTUtil;
 import com.nhnacademy.auth.user.dto.reponse.MemberDto;
 import com.nhnacademy.auth.user.dto.reponse.MemberInfoResponseDto;
 import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
+import com.nhnacademy.auth.user.dto.request.MemberVerifyRequest;
 import com.nhnacademy.auth.user.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,17 @@ public class MemberController {
     @GetMapping("/member/{memberId}")
     public ResponseEntity<MemberDto> getMember(@PathVariable Long memberId) {
         return ResponseEntity.ok().body(memberService.getMember(memberId));
+    }
+
+    @GetMapping("/member/info/{memberId}")
+    public ResponseEntity<MemberInfoResponseDto> getMemberInfo(@PathVariable Long memberId) {
+        return ResponseEntity.ok().body(memberService.getMemberInfoByCustomerNo(memberId));
+    }
+
+    @PostMapping("/member/changeToActive")
+    public ResponseEntity<Void> changeToActive(@RequestBody String memberId) {
+        memberService.changeToActive(memberId);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -101,6 +113,11 @@ public class MemberController {
     @GetMapping("/member/exist/{memberId}")
     public ResponseEntity<Boolean> existMember(@PathVariable String memberId) {
         return ResponseEntity.ok().body(memberService.existMemberByMemberId(memberId));
+    }
+
+    @PostMapping("/member/verify")
+    public ResponseEntity<Boolean> verifyMember(@RequestBody MemberVerifyRequest memberVerifyRequest) {
+        return ResponseEntity.ok().body(memberService.verifyMember(memberVerifyRequest));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

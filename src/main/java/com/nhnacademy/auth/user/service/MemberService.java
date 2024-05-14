@@ -3,6 +3,7 @@ package com.nhnacademy.auth.user.service;
 import com.nhnacademy.auth.user.dto.reponse.MemberDto;
 import com.nhnacademy.auth.user.dto.reponse.MemberInfoResponseDto;
 import com.nhnacademy.auth.user.dto.request.MemberCreateRequest;
+import com.nhnacademy.auth.user.dto.request.MemberVerifyRequest;
 import org.springframework.data.domain.Page;
 
 
@@ -53,4 +54,20 @@ public interface MemberService {
     MemberInfoResponseDto getMemberByMemberId(String memberId);
 
     boolean existMemberByMemberId(String memberId);
+
+    /**
+     * customerId와 password가 일치하는 지 확인하는 메소드
+     * @param memberVerifyRequest
+     * @return boolean
+     */
+    boolean verifyMember(MemberVerifyRequest memberVerifyRequest);
+
+    /**
+     * customerNo로 조회
+     * @param customerNo
+     * @return
+     */
+    MemberInfoResponseDto getMemberInfoByCustomerNo(Long customerNo);
+
+    void changeToActive(String customerId);
 }

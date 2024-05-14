@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 @Getter
 public class MemberInfoResponseDto {
     private String memberId;
+    private String memberName;
+    private String email;
+    private String phoneNumber;
     private LocalDateTime lastLoginAt;
     private String role;
 }

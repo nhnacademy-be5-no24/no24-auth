@@ -37,4 +37,10 @@ public class Member {
     @Column(name = "member_state")
     private MemberState memberState;
 
+    public Member setState(MemberState memberState) {
+        this.memberState = memberState;
+
+        return this;
+    }
+
 }
