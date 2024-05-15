@@ -3,6 +3,7 @@ package com.nhnacademy.auth.user.service.impl;
 import com.nhnacademy.auth.address.domain.Address;
 import com.nhnacademy.auth.address.repository.AddressRepository;
 import com.nhnacademy.auth.exception.GradeNotFoundException;
+import com.nhnacademy.auth.exception.MemberAlreadyExistException;
 import com.nhnacademy.auth.exception.MemberNotFoundException;
 import com.nhnacademy.auth.user.dto.reponse.MemberDto;
 import com.nhnacademy.auth.user.dto.reponse.MemberInfoResponseDto;
@@ -54,6 +55,10 @@ public class MemberServiceImpl implements MemberService {
     public MemberDto createMember(MemberCreateRequest memberCreateRequest) {
         String rawPassword = memberCreateRequest.getCustomerPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+
+        if(memberRepository.existsByMemberId(memberCreateRequest.getCustomerId())) {
+            throw new MemberAlreadyExistException(memberCreateRequest.getCustomerId());
+        }
 
         Customer customer = Customer.builder()
                 .customerId(memberCreateRequest.getCustomerId())
